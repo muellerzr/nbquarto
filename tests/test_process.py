@@ -3,7 +3,10 @@ from execnb.nbio import new_nb, mk_cell
 
 from nbdev_mini.process import Processor, NotebookProcessor
 
-class TestProcessor(Processor):
+class BasicProcessor(Processor):
+    """
+    A basic processor that adds a comment to the top of a cell
+    """
     def process_cell(self, cell):
         if cell.cell_type == "code":
             if "process" in cell.directives_:
@@ -14,7 +17,7 @@ class TestProcess(unittest.TestCase):
     Tests for verifying that notebooks can successfully
     be processed. 
     """
-    processor = TestProcessor
+    processor = BasicProcessor
 
     def reset_cells(self):
         test_cells = [

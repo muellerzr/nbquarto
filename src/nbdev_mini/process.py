@@ -207,16 +207,6 @@ class NotebookProcessor:
         """
         if not hasattr(cell, "source"):
             return
-        if cell.cell_type == "code" and cell.directives_ is not None:
-            # Option 1: processor is a directive name with a `_` suffix
-            directive = getattr(processor, "__name__", "-").rstrip("_")
-            if directive in cell.directives_:
-                self.process_comment(processor, cell, directive)
-
-            # Option 2: processor contains a method named `_{directive}_`
-            for command in cell.directives_:
-                if hasattr(processor, f"_{command}_"):
-                    self.process_comment(processor, cell, command)
         if callable(processor) and not is_directive(processor):
             processed_cell = processor(cell)
             if processed_cell is not None:
