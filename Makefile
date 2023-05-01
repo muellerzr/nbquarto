@@ -9,4 +9,4 @@ style:
 	ruff $(check_dirs)
 
 test:
-	pytest -sv tests
+	pytest -sv ./tests
