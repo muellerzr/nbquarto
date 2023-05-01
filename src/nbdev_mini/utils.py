@@ -65,17 +65,3 @@ langs = defaultdict(
     dot="//",
     apl="⍝",
 )
-
-
-def notebook_language(notebook: AttributeDictionary) -> str:
-    """
-    Get the language of a notebook
-
-    Args:
-        notebook (`AttributeDictionary`):
-            An object representing all the cells in a Jupyter Notebook
-    """
-    if "metadata" in notebook:
-        if "kernelspec" in notebook.metadata:
-            return getattr(notebook.metadata.kernelspec, "language", "python")
-    return "python"

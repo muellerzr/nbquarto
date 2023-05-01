@@ -80,6 +80,19 @@ def read_notebook(path: str):
     notebook["path_"] = str(path)
     return notebook
 
+def notebook_language(notebook: AttributeDictionary) -> str:
+    """
+    Get the language of a notebook
+
+    Args:
+        notebook (`AttributeDictionary`):
+            An object representing all the cells in a Jupyter Notebook
+    """
+    if "metadata" in notebook:
+        if "kernelspec" in notebook.metadata:
+            return getattr(notebook.metadata.kernelspec, "language", "python")
+    return "python"
+
 
 def new_notebook(
     cells: list = [], metadata: dict = {}, nbformat: int = 4, nbformat_minor: int = 5
