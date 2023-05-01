@@ -80,6 +80,7 @@ def read_notebook(path: str):
     notebook["path_"] = str(path)
     return notebook
 
+
 def notebook_language(notebook: AttributeDictionary) -> str:
     """
     Get the language of a notebook

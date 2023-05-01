@@ -2,6 +2,7 @@ from .foundation import AttributeDictionary
 from .notebook import read_notebook, notebook_language
 from .process import make_processors, extract_directives, is_directive
 
+
 class NotebookProcessor:
     def __init__(
         self,
@@ -105,6 +106,7 @@ class NotebookProcessor:
             for i, cell in enumerate(self.notebook.cells):
                 cell.index_ = i
 
+
 class Processor:
     """
     Base class for all notebook processors.
@@ -142,7 +144,6 @@ class Processor:
         raise NotImplementedError(
             "You must implement the `process` method to apply this processor"
         )
-
 
     def process_cell(self, cell: AttributeDictionary):
         """

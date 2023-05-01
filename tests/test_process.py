@@ -8,6 +8,7 @@ class BasicProcessor(Processor):
     """
     A basic processor that adds a comment to the top of a cell
     """
+
     directive = "process"
 
     def process(self, cell):
