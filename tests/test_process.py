@@ -8,11 +8,10 @@ class BasicProcessor(Processor):
     """
     A basic processor that adds a comment to the top of a cell
     """
+    directive = "process"
 
-    def process_cell(self, cell):
-        if cell.cell_type == "code":
-            if "process" in cell.directives_:
-                cell.source = f"# This code has been processed!\n{cell.source}"
+    def process(self, cell):
+        cell.source = f"# This code has been processed!\n{cell.source}"
 
 
 class TestProcess(unittest.TestCase):

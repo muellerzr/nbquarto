@@ -120,6 +120,9 @@ class Processor:
     in a single cell.
     """
 
+    directive: str = None
+    cell_type: str = "code"
+
     def __init__(self, notebook: AttributeDictionary):
         """
         Args:
@@ -128,17 +131,31 @@ class Processor:
         """
         self.notebook = notebook
 
-    def process_cell(self, cell: AttributeDictionary):
+    def process(self, cell: AttributeDictionary):
         """
-        Processes a single cell of a notebook
+        A function to apply on a cell.
 
         Args:
             cell (`AttributeDictionary`):
                 A cell from a Jupyter Notebook
         """
         raise NotImplementedError(
-            "You must implement the `process_cell` method to apply this processor"
+            "You must implement the `process` method to apply this processor"
         )
+
+
+    def process_cell(self, cell: AttributeDictionary):
+        """
+        Applies the processor to a cell if the cell is of the
+        correct type and contains the correct directive
+
+        Args:
+            cell (`AttributeDictionary`):
+                A cell from a Jupyter Notebook
+        """
+        if cell.cell_type == self.cell_type:
+            if self.directive in cell.directives_:
+                return self.process(cell)
 
     def __call__(self, cell: AttributeDictionary):
         """
