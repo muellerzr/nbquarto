@@ -1,6 +1,6 @@
 import unittest
-from execnb.nbio import new_nb, mk_cell
 
+from nbdev_mini.notebook import make_cell, new_notebook
 from nbdev_mini.process import Processor, NotebookProcessor
 
 class BasicProcessor(Processor):
@@ -21,11 +21,11 @@ class TestProcess(unittest.TestCase):
 
     def reset_cells(self):
         test_cells = [
-            mk_cell("#| process\ndef addition(a,b):\n  return a+b", "code"),
-            mk_cell("#|process\ndef subtraction(a,b):\n  return a-b", "code"),
-            mk_cell("def multiplication(a,b):\n  return a*b", "code"),
+            make_cell("#| process\ndef addition(a,b):\n  return a+b", "code"),
+            make_cell("#|process\ndef subtraction(a,b):\n  return a-b", "code"),
+            make_cell("def multiplication(a,b):\n  return a*b", "code"),
         ]
-        self.test_notebook = new_nb(cells=test_cells)
+        self.test_notebook = new_notebook(cells=test_cells)
 
     def setUp(self):
         self.reset_cells()

@@ -1,6 +1,6 @@
 from .foundation import AttributeDictionary
+from .notebook import read_notebook
 from .utils import notebook_language, langs
-from execnb.nbio import read_nb
 import re
 
 cell_magic = re.compile(r"^\s*%%\w+")
@@ -166,7 +166,7 @@ class NotebookProcessor:
             process_immediately (`bool`, *optional*, defaults to False):
                 Whether to process the notebook after initialization
         """
-        self.notebook = read_nb(path) if notebook is None else notebook
+        self.notebook = read_notebook(path) if notebook is None else notebook
         self.language = notebook_language(self.notebook)
         for cell in self.notebook.cells:
             cell.directives_ = extract_directives(cell, remove_directives=remove_directives, language=self.language)
@@ -224,7 +224,7 @@ class NotebookProcessor:
                 try:
                     self.process_cell(processor, cell)
                 except Exception as e:
-                    raise Exception(f"Error processing cell {cell.idx_} with processor {processor.__class__}") from e
+                    raise Exception(f"Error processing cell {cell.index_} with processor {processor.__class__}") from e
             if hasattr(processor, "end"):
                 processor.end()
             self.notebook.cells = [

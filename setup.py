@@ -6,7 +6,7 @@ setup(
     license='MIT',
     description='A minimal nbdev example focused on writing quarto extensions',
     long_description=open('README.md').read(),
-    install_requires=["execnb==0.1.5"],
+    install_requires=[],
     keywords="quarto",
     url='https://github.com/muellerzr/nbdev-mini',
     author='Zachary Mueller',
