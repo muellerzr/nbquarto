@@ -3,6 +3,79 @@ from .notebook import read_notebook, notebook_language
 from .process import make_processors, extract_directives, is_directive
 
 
+class Processor:
+    """
+    Base class for all notebook processors.
+    Any processors should inherit this class.
+
+    When writing a processor, you can override methods that
+    modify the content of a cell with the `process_cell` function.
+
+    The class stores the entire notebook in the `notebook`
+    attribute.
+
+    When using a processor, simply call the class and pass
+    in a single cell.
+
+    Example:
+
+    ```python
+    class BasicProcessor(Processor):
+        "A basic processor that adds a comment to the top of a cell"
+        directive = "process"
+
+        def process(self, cell):
+            cell.source = f"# This code has been processed!\n{cell.source}"
+    ```
+    """
+
+    directive: str = None
+    cell_type: str = "code"
+
+    def __init__(self, notebook: AttributeDictionary):
+        """
+        Args:
+            notebook (`AttributeDictionary`):
+                An object representing all the cells in a Jupyter Notebook
+        """
+        self.notebook = notebook
+
+    def process(self, cell: AttributeDictionary):
+        """
+        A function to apply on a cell.
+
+        Args:
+            cell (`AttributeDictionary`):
+                A cell from a Jupyter Notebook
+        """
+        raise NotImplementedError(
+            "You must implement the `process` method to apply this processor"
+        )
+
+    def process_cell(self, cell: AttributeDictionary):
+        """
+        Applies the processor to a cell if the cell is of the
+        correct type and contains the correct directive
+
+        Args:
+            cell (`AttributeDictionary`):
+                A cell from a Jupyter Notebook
+        """
+        if cell.cell_type == self.cell_type:
+            if self.directive in cell.directives_:
+                return self.process(cell)
+
+    def __call__(self, cell: AttributeDictionary):
+        """
+        Processes a single cell of a notebook
+
+        Args:
+            cell (`AttributeDictionary`):
+                A cell from a Jupyter Notebook
+        """
+        return self.process_cell(cell)
+
+
 class NotebookProcessor:
     def __init__(
         self,
@@ -105,65 +178,3 @@ class NotebookProcessor:
             ]
             for i, cell in enumerate(self.notebook.cells):
                 cell.index_ = i
-
-
-class Processor:
-    """
-    Base class for all notebook processors.
-    Any processors should inherit this class.
-
-    When writing a processor, you can override methods that
-    modify the content of a cell with the `process_cell` function.
-
-    The class stores the entire notebook in the `notebook`
-    attribute.
-
-    When using a processor, simply call the class and pass
-    in a single cell.
-    """
-
-    directive: str = None
-    cell_type: str = "code"
-
-    def __init__(self, notebook: AttributeDictionary):
-        """
-        Args:
-            notebook (`AttributeDictionary`):
-                An object representing all the cells in a Jupyter Notebook
-        """
-        self.notebook = notebook
-
-    def process(self, cell: AttributeDictionary):
-        """
-        A function to apply on a cell.
-
-        Args:
-            cell (`AttributeDictionary`):
-                A cell from a Jupyter Notebook
-        """
-        raise NotImplementedError(
-            "You must implement the `process` method to apply this processor"
-        )
-
-    def process_cell(self, cell: AttributeDictionary):
-        """
-        Applies the processor to a cell if the cell is of the
-        correct type and contains the correct directive
-
-        Args:
-            cell (`AttributeDictionary`):
-                A cell from a Jupyter Notebook
-        """
-        if cell.cell_type == self.cell_type:
-            if self.directive in cell.directives_:
-                return self.process(cell)
-
-    def __call__(self, cell: AttributeDictionary):
-        """
-        Processes a single cell of a notebook
-
-        Args:
-            cell (`AttributeDictionary`):
-                A cell from a Jupyter Notebook
-        """
-        return self.process_cell(cell)
