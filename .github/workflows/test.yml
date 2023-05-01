@@ -26,7 +26,7 @@ jobs:
     - name: Install the library
       run: |
         pip install --upgrade pip
-        pip install -e .
+        pip install -e .[testing]
     
     - name: Run Tests
       run: |
