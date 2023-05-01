@@ -1,4 +1,5 @@
-import ast, json
+import ast
+import json
 from pathlib import Path
 from .foundation import AttributeDictionary
 from .utils import dict2obj
@@ -8,7 +9,8 @@ class NotebookCell(AttributeDictionary):
     """
     A cell for a Jupyter Notebook
     """
-    def __init__(self, index:int, cell:dict):
+
+    def __init__(self, index: int, cell: dict):
         """
         Args:
             index (`int`):
@@ -18,10 +20,10 @@ class NotebookCell(AttributeDictionary):
         """
         super().__init__(cell)
         self.index_ = index
-        if 'source' in self:
+        if "source" in self:
             self.set_source(self.source)
 
-    def set_source(self, source:list):
+    def set_source(self, source: list):
         """
         Sets the source attribute of the cell as a string and removes parsed directives
 
@@ -34,24 +36,25 @@ class NotebookCell(AttributeDictionary):
             del self._parsed_
 
     def parsed_(self):
-        if self.cell_type != "code" or self.source.strip()[:1] in ["%", "!"]: 
+        if self.cell_type != "code" or self.source.strip()[:1] in ["%", "!"]:
             return
         if "_parsed_" not in self:
             try:
                 self._parsed_ = ast.parse(self.source.body)
             # You cna assign the result of ! to a variable in a notebook cell,
-            # which results in a Syntax Error if parsed with ast    
+            # which results in a Syntax Error if parsed with ast
             except SyntaxError:
                 return
         return self._parsed_
 
     def __hash__(self):
         return hash(self.source) + hash(self.cell_type)
-    
+
     def __eq__(self, other):
         return self.source == other.source and self.cell_type == other.cell_type
-    
-def dict2notebook(d:dict=None, **kwargs):
+
+
+def dict2notebook(d: dict = None, **kwargs):
     """
     Converts dictionary `d` to an `AttributeDictionary`
 
@@ -64,7 +67,7 @@ def dict2notebook(d:dict=None, **kwargs):
     return notebook
 
 
-def read_notebook(path:str):
+def read_notebook(path: str):
     """
     Reads a Jupyter Notebook from a filepath
 
@@ -77,7 +80,10 @@ def read_notebook(path:str):
     notebook["path_"] = str(path)
     return notebook
 
-def new_notebook(cells:list = [], metadata:dict={}, nbformat:int=4, nbformat_minor:int=5):
+
+def new_notebook(
+    cells: list = [], metadata: dict = {}, nbformat: int = 4, nbformat_minor: int = 5
+):
     """
     Creates a new empty notebook
 
@@ -92,13 +98,11 @@ def new_notebook(cells:list = [], metadata:dict={}, nbformat:int=4, nbformat_min
             The minor nbformat version of the notebook
     """
     return dict2notebook(
-        cells=cells,
-        metadata=metadata,
-        nbformat=nbformat,
-        nbformat_minor=nbformat_minor
+        cells=cells, metadata=metadata, nbformat=nbformat, nbformat_minor=nbformat_minor
     )
 
-def make_cell(text:str, cell_type:str="code", **kwargs):
+
+def make_cell(text: str, cell_type: str = "code", **kwargs):
     """
     Makes a blank notebook cell
 
@@ -111,13 +115,11 @@ def make_cell(text:str, cell_type:str="code", **kwargs):
             Additional arguments to pass to the cell, such as `metadata`
     """
     if cell_type not in ["code", "markdown", "raw"]:
-        raise ValueError(f"cell_type must be one of 'code', 'markdown', or 'raw', not {cell_type}")
+        raise ValueError(
+            f"cell_type must be one of 'code', 'markdown', or 'raw', not {cell_type}"
+        )
     metadata = kwargs.pop("metadata", {})
     cell = dict(
-        cell_type=cell_type,
-        source=text,
-        directives_={},
-        metadata=metadata,
-        **kwargs
+        cell_type=cell_type, source=text, directives_={}, metadata=metadata, **kwargs
     )
     return NotebookCell(0, cell)

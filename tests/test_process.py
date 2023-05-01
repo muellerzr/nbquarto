@@ -3,20 +3,24 @@ import unittest
 from nbdev_mini.notebook import make_cell, new_notebook
 from nbdev_mini.process import Processor, NotebookProcessor
 
+
 class BasicProcessor(Processor):
     """
     A basic processor that adds a comment to the top of a cell
     """
+
     def process_cell(self, cell):
         if cell.cell_type == "code":
             if "process" in cell.directives_:
-                cell.source = f'# This code has been processed!\n{cell.source}'
+                cell.source = f"# This code has been processed!\n{cell.source}"
+
 
 class TestProcess(unittest.TestCase):
     """
     Tests for verifying that notebooks can successfully
-    be processed. 
+    be processed.
     """
+
     processor = BasicProcessor
 
     def reset_cells(self):
@@ -29,13 +33,23 @@ class TestProcess(unittest.TestCase):
 
     def setUp(self):
         self.reset_cells()
-        self.notebook_processor = NotebookProcessor(processors=[self.processor], notebook=self.test_notebook)
+        self.notebook_processor = NotebookProcessor(
+            processors=[self.processor], notebook=self.test_notebook
+        )
 
     def test_notebook_process(self):
         """
         Test that a notebook can be processed
         """
         self.notebook_processor.process_notebook()
-        self.assertEqual(self.test_notebook.cells[0].source, "# This code has been processed!\ndef addition(a,b):\n  return a+b")
-        self.assertEqual(self.test_notebook.cells[1].source, "# This code has been processed!\ndef subtraction(a,b):\n  return a-b")
-        self.assertEqual(self.test_notebook.cells[2].source, "def multiplication(a,b):\n  return a*b")
+        self.assertEqual(
+            self.test_notebook.cells[0].source,
+            "# This code has been processed!\ndef addition(a,b):\n  return a+b",
+        )
+        self.assertEqual(
+            self.test_notebook.cells[1].source,
+            "# This code has been processed!\ndef subtraction(a,b):\n  return a-b",
+        )
+        self.assertEqual(
+            self.test_notebook.cells[2].source, "def multiplication(a,b):\n  return a*b"
+        )

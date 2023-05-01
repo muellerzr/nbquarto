@@ -14,15 +14,16 @@ class AttributeDictionary(dict):
         3
         ```
     """
+
     def __getattr__(self, k):
-        if k not in self: 
+        if k not in self:
             raise AttributeError(k)
         return self[k]
-    
-    def __setattr__(self, k, v): 
-        is_private = k[0]=='_'
+
+    def __setattr__(self, k, v):
+        is_private = k[0] == "_"
         if is_private:
-            super().__setattr__(k,v)
+            super().__setattr__(k, v)
         else:
             self[k] = v
 
@@ -30,6 +31,6 @@ class AttributeDictionary(dict):
         res = [*self.keys()]
         res.extend(super().__dir__())
         return res
-    
+
     def copy(self):
         return AttributeDictionary(self)

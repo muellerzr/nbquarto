@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 
+extras = {}
+extras["quality"] = ["black ~= 23.1", "ruff >= 0.0.241"]
+
 setup(
     name='nbdev-mini',
     version='0.0.1',
@@ -7,6 +10,7 @@ setup(
     description='A minimal nbdev example focused on writing quarto extensions',
     long_description=open('README.md').read(),
     install_requires=[],
+    extras_require=extras,
     keywords="quarto",
     url='https://github.com/muellerzr/nbdev-mini',
     author='Zachary Mueller',
