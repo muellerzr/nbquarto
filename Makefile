@@ -7,3 +7,6 @@ quality:
 style:
 	black $(check_dirs)
 	ruff $(check_dirs)
+
+test:
+	pytest -sv tests
