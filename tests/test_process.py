@@ -9,7 +9,7 @@ class BasicProcessor(Processor):
     A basic processor that adds a comment to the top of a cell
     """
 
-    directive = "process"
+    directives = "process"
 
     def process(self, cell):
         cell.source = f"# This code has been processed!\n{cell.source}"

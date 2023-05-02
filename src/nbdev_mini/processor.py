@@ -1,3 +1,5 @@
+from typing import Union, List
+
 from .foundation import AttributeDictionary
 from .notebook import read_notebook, notebook_language
 from .process import make_processors, extract_directives, is_directive
@@ -29,8 +31,8 @@ class Processor:
     ```
     """
 
-    directive: str = None
-    cell_type: str = "code"
+    directives: Union[List[str], str] = None
+    cell_types: Union[List[str], str] = "code"
 
     def __init__(self, notebook: AttributeDictionary):
         """
@@ -39,6 +41,10 @@ class Processor:
                 An object representing all the cells in a Jupyter Notebook
         """
         self.notebook = notebook
+        if not isinstance(self.directives, list):
+            self.directives = [self.directives]
+        if not isinstance(self.cell_types, list):
+            self.cell_types = [self.cell_types]
 
     def process(self, cell: AttributeDictionary):
         """
@@ -61,8 +67,8 @@ class Processor:
             cell (`AttributeDictionary`):
                 A cell from a Jupyter Notebook
         """
-        if cell.cell_type == self.cell_type:
-            if self.directive in cell.directives_:
+        if cell.cell_type in self.cell_types:
+            if any(directive in cell.directives_ for directive in self.directives):
                 return self.process(cell)
 
     def __call__(self, cell: AttributeDictionary):
@@ -110,7 +116,6 @@ class NotebookProcessor:
             cell.directives_ = extract_directives(
                 cell, remove_directives=remove_directives, language=self.language
             )
-            # print(f'Directives: {cell.directives_}')
         self.processors = make_processors(processors, notebook=self.notebook)
         self.debug = debug
         self.remove_directives = remove_directives
