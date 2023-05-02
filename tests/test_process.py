@@ -1,7 +1,7 @@
 import unittest
 
-from nbdev_mini.notebook import make_cell, new_notebook
-from nbdev_mini.processor import Processor, NotebookProcessor
+from nbquarto.notebook import make_cell, new_notebook
+from nbquarto.processor import Processor, NotebookProcessor
 
 
 class BasicProcessor(Processor):
