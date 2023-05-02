@@ -1,5 +1,5 @@
 from nbquarto.notebook import write_notebook
-from nbquarto.processor import NotebookProcessor
+from nbquarto.processor import NotebookProcessor, Processor
 
 class BasicProcessor(Processor):
     """
