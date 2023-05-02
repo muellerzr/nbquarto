@@ -5,15 +5,15 @@ extras["quality"] = ["black ~= 23.1", "ruff >= 0.0.241"]
 extras["testing"] = ["pytest"]
 
 setup(
-    name='nbdev-mini',
+    name='nbquarto',
     version='0.0.1',
     license='MIT',
-    description='A minimal nbdev example focused on writing quarto extensions',
+    description='A minimal nbdev version, focused on writing quarto extensions',
     long_description=open('README.md').read(),
     install_requires=[],
     extras_require=extras,
     keywords="quarto",
-    url='https://github.com/muellerzr/nbdev-mini',
+    url='https://github.com/muellerzr/nbquarto',
     author='Zachary Mueller',
     package_dir = {'': 'src'},
     packages=find_packages(where='src'),
