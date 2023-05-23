@@ -82,8 +82,7 @@ class Processor:
                 A cell from a Jupyter Notebook
         """
         if cell.cell_type in self.cell_types:
-            if any(directive in cell.directives_ for directive in self.directives):
-                return self.process(cell)
+            return self.process(cell)
 
     def __call__(self, cell: AttributeDictionary):
         """
@@ -185,8 +184,9 @@ class NotebookProcessor:
                     self.process_cell(processor, cell)
                 except Exception as e:
                     raise Exception(
-                        f"Error processing cell {cell.index_} with "
-                        "processor {processor.__class__}"
+                        f"Error processing cell {cell.index_} with processor:"
+                        f" `{processor.__module__}.{processor.__class__.__name__}`. "
+                        "Please check earlier in the trace to see the true issue."
                     ) from e
             if hasattr(processor, "end"):
                 processor.end()

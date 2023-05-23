@@ -2,6 +2,7 @@ import unittest
 
 from nbquarto.notebook import make_cell, new_notebook
 from nbquarto.processor import Processor, NotebookProcessor
+from nbquarto.processors.codenotes import CodeNoteProcessor
 
 
 class BasicProcessor(Processor):
@@ -12,7 +13,8 @@ class BasicProcessor(Processor):
     directives = "process"
 
     def process(self, cell):
-        cell.source = f"# This code has been processed!\n{cell.source}"
+        if any(directive in cell.directives_ for directive in self.directives):
+            cell.source = f"# This code has been processed!\n{cell.source}"
 
 
 class TestProcess(unittest.TestCase):
@@ -52,4 +54,47 @@ class TestProcess(unittest.TestCase):
         )
         self.assertEqual(
             self.test_notebook.cells[2].source, "def multiplication(a,b):\n  return a*b"
+        )
+
+
+class TestCodeNotes(unittest.TestCase):
+    processor = CodeNoteProcessor
+
+    def reset_cells(self):
+        test_cells = [
+            make_cell("# Test Notebook", "markdown"),
+            make_cell("def addition(a,b):\n  return a+b", "code"),
+            make_cell(
+                "#| explain addition 0 (\nThis function adds two numbers together",
+                "markdown",
+            ),
+            make_cell("", "markdown"),
+        ]
+        self.test_notebook = new_notebook(cells=test_cells)
+
+    def setUp(self):
+        self.reset_cells()
+        self.notebook_processor = NotebookProcessor(
+            processors=[self.processor], notebook=self.test_notebook
+        )
+
+    def test_codenotes(self):
+        self.notebook_processor.process_notebook()
+        self.assertEqual(
+            self.test_notebook.cells[1].source, "::: {.panel-tabset}\n\n## Code"
+        )
+        self.assertEqual(
+            self.test_notebook.cells[2].source, "def addition(a,b):\n  return a+b"
+        )
+        self.assertEqual(self.test_notebook.cells[3].source, "## Code & Explanation")
+        self.assertEqual(
+            self.test_notebook.cells[4].source, "def addition(a,b):\n  return a+b"
+        )
+        self.assertEqual(
+            self.test_notebook.cells[5].source,
+            (
+                "\n***\n```{.python}\n addition("
+                "\n```\n:::{style='padding-top: 0px;'}"
+                "\nThis function adds two numbers together\n:::"
+            ),
         )
