@@ -1,7 +1,7 @@
 ---
-title: "nbdev mini"
+title: "nbquarto"
 ---
 
-# nbdev-mini
+# nbquarto
 
 Small version of nbdev designed solely for quick Quarto extensions
