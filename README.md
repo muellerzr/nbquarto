@@ -20,7 +20,8 @@ As a result, the codebase here is almost a 1:1 of the code in nbdev *functionall
 
 As mentioned earlier, `Processors` take the content in any Jupyter Notebook cell and modify it in some way. The original design intention was to inject Quarto-specific nuonces into the cell to help with code formatting, or to write quick shortcuts to create complex combinations in quarto syntax on the fly.
 
-The following is a small snippet (taken from a [test](tests/test_process.py)) which simply injects the code:
+The following is a small snippet (taken from the [official example processor](src/nbquarto/processors/example.py)) which simply injects the code:
+
 ```python
 # This code has been processed!
 ```
@@ -42,3 +43,28 @@ class BasicProcessor(Processor):
 ```
 
 The `process` function is what will get applied to the notebook cell, after checking if any directives to look for exist in the cell. 
+
+## Creating a config file
+
+After either creating your own processor, or deciding what processor to use, a config file should be generated that contains the exact imports for processors you want to use, and where processed notebooks should be sent to. 
+
+See below for an example, located [here](tests/test_artifacts/single_processor.yaml) in the repo:
+
+```yaml
+output_folder: processed_notebooks
+processors: [
+  nbquarto.processors.example:BasicProcessor
+]
+```
+This reads as follows:
+- `output_folder`: All notebooks will be saved to a (potentially new) `processed_notebooks` directory
+- `processors`: This contains the list of processors we want to apply
+- `nbquarto.processors.example:BasicProcessor`: This is the exact import for the processor to apply
+
+## Calling the Processors from the CLI
+
+Finally, by calling the `nbquarto-process` command you can process notebooks with your configured `Processor`(s):
+
+```bash
+nbquarto-process --config_file tests/test_artifacts/single_processor.yaml --notebook_file tests/test_artifacts/test_example.ipynb
+```
