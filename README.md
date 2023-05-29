@@ -18,7 +18,7 @@ As a result, the codebase here is almost a 1:1 of the code in nbdev *functionall
 
 ## Creating a `Processor`
 
-As mentioned earlier, `Processors` take the content in any Jupyter Notebook cell and modify it in some way. The original design intention was to inject Quarto-specific nuonces into the cell to help with code formatting, or to write quick shortcuts to create complex combinations in quarto syntax on the fly.
+As mentioned earlier, a `Processor` take the content in any Jupyter Notebook cell and modify it in some way. The original design intention was to inject Quarto-specific nuonces into the cell to help with code formatting, or to write quick shortcuts to create complex combinations in quarto syntax on the fly.
 
 The following is a small snippet (taken from the [official example processor](src/nbquarto/processors/example.py)) which simply injects the code:
 
@@ -61,7 +61,7 @@ This reads as follows:
 - `processors`: This contains the list of processors we want to apply
 - `nbquarto.processors.example:BasicProcessor`: This is the exact import for the processor to apply
 
-## Calling the Processors from the CLI
+## Calling the `Processor`(s) from the CLI
 
 Finally, by calling the `nbquarto-process` command you can process notebooks with your configured `Processor`(s):
 
