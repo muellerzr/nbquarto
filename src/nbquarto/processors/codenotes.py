@@ -156,13 +156,10 @@ class CodeNoteProcessor(Processor):
     cell_types = ["code", "markdown"]
 
     offset: int = 0
-    steps: list = []
     _index = 0
 
     def begin(self):
         self.reset()
-        self.has_reset = False
-        self.iteration = 0
 
     def reset(self):
         self.content = make_panel_tabset()
@@ -172,7 +169,6 @@ class CodeNoteProcessor(Processor):
         self.found_explanation = False
         self.end_link = False
         self.start_index = None
-        self.end_index = None
 
     def process(self, cell):
         if cell.cell_type == "code":
@@ -189,7 +185,6 @@ class CodeNoteProcessor(Processor):
                 len(self.notebook.cells) <= index + 1
             ):
                 self.end_link = True
-                self.end_index = index
 
             # After we have found all the code and explanations, we can start processing
             if self.end_link:
@@ -215,9 +210,7 @@ class CodeNoteProcessor(Processor):
                     cell.index_ = self.notebook.cells[self.start_index - 1].index_ + 1
                     self.notebook.cells.insert(self.start_index + offset, cell)
                     offset += 1
-                self.iteration += 1
                 self.reset()
-                self.has_reset = True
 
                 for i, cell in enumerate(self.notebook.cells):
                     cell.index_ = i

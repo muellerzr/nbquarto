@@ -135,25 +135,6 @@ class NotebookProcessor:
         if process_immediately:
             self.process_notebook()
 
-    def process_comment(
-        self, processor: callable, cell: AttributeDictionary, command: str
-    ):
-        """
-        Processes a comment in a notebook cell
-
-        Args:
-            processor (`callable`):
-                A function to apply to a notebook cell's content
-            cell (`AttributeDictionary`):
-                A cell from a Jupyter Notebook
-            command (`str`):
-                The command to process
-        """
-        arguments = cell.directives_[command]
-        if self.debug:
-            print(f"Processing {command} in cell {cell} with arguments {arguments}")
-        return processor(cell, command, arguments)
-
     def process_cell(self, processor: callable, cell: AttributeDictionary):
         """
         Processes a single cell of a notebook. Should not be called

@@ -46,6 +46,3 @@ class AttributeDictionary(dict):
         res = [*self.keys()]
         res.extend(super().__dir__())
         return res
-
-    def copy(self):
-        return AttributeDictionary(self)

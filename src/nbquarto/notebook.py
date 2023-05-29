@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import ast
 import json
 from pathlib import Path
 from .foundation import AttributeDictionary
@@ -48,18 +47,6 @@ class NotebookCell(AttributeDictionary):
         self.source = "".join(source)
         if "_parsed_" in self:
             del self._parsed_
-
-    def parsed_(self):
-        if self.cell_type != "code" or self.source.strip()[:1] in ["%", "!"]:
-            return
-        if "_parsed_" not in self:
-            try:
-                self._parsed_ = ast.parse(self.source.body)
-            # You cna assign the result of ! to a variable in a notebook cell,
-            # which results in a Syntax Error if parsed with ast
-            except SyntaxError:
-                return
-        return self._parsed_
 
     def __hash__(self):
         return hash(self.source) + hash(self.cell_type)
