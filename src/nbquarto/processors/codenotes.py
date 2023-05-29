@@ -14,13 +14,11 @@
 import re
 from typing import List
 
+from ..notebook import NotebookCell, make_cell
 from ..processor import Processor
-from ..notebook import make_cell, NotebookCell
 
 
-def make_panel_tabset(
-    first_tab: str = "Code", second_tab: str = "Code & Explanation"
-) -> List[NotebookCell]:
+def make_panel_tabset(first_tab: str = "Code", second_tab: str = "Code & Explanation") -> List[NotebookCell]:
     """
     Creates a panel tabset with two tabs
 
@@ -43,9 +41,7 @@ def make_panel_tabset(
     return cells
 
 
-def convert_explanation(
-    explanation_cell: NotebookCell, source_code: str
-) -> NotebookCell:
+def convert_explanation(explanation_cell: NotebookCell, source_code: str) -> NotebookCell:
     """
     Takes an explanation cell and source code, and links them together in a new cell
 
@@ -91,9 +87,7 @@ def extract_code(
     Returns:
         `str`: The code between `start_code` and `end_code`
     """
-    start_match = list(re.finditer(f"[ \t]*{start_code}", source))[
-        start_instance_number
-    ]
+    start_match = list(re.finditer(f"[ \t]*{start_code}", source))[start_instance_number]
     starting_character = start_match.span()[0]
     end_match = list(re.finditer(f"[ \t]*{end_code}", source))[end_instance_number]
     ending_character = end_match.span()[1]
@@ -181,9 +175,7 @@ class CodeNoteProcessor(Processor):
 
         if self.found_explanation:
             index = cell.index_ + 1
-            if ("explain" not in self.notebook.cells[index].directives_) or (
-                len(self.notebook.cells) <= index + 1
-            ):
+            if ("explain" not in self.notebook.cells[index].directives_) or (len(self.notebook.cells) <= index + 1):
                 self.end_link = True
 
             # After we have found all the code and explanations, we can start processing
@@ -193,16 +185,12 @@ class CodeNoteProcessor(Processor):
                 self.content.insert(tabset_code_index, self._code)
                 explanations = [self._code]
                 for i, explanation in enumerate(self.explanations):
-                    source = parse_multiline_code(
-                        self._code, explanation.directives_["explain"]
-                    )
+                    source = parse_multiline_code(self._code, explanation.directives_["explain"])
                     converted_explanation = convert_explanation(explanation, source)
                     explanations.append(converted_explanation)
                     self.notebook.cells.remove(explanation)
                 self.content = (
-                    self.content[:tabset_explain_index]
-                    + explanations
-                    + [self.content[tabset_explain_index]]
+                    self.content[:tabset_explain_index] + explanations + [self.content[tabset_explain_index]]
                 )
                 self.notebook.cells.remove(self._code)
                 offset = 0

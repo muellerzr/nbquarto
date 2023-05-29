@@ -1,7 +1,7 @@
 import unittest
 
 from nbquarto.notebook import make_cell, new_notebook
-from nbquarto.processor import Processor, NotebookProcessor
+from nbquarto.processor import NotebookProcessor, Processor
 from nbquarto.processors.codenotes import CodeNoteProcessor
 
 
@@ -35,9 +35,7 @@ class TestProcess(unittest.TestCase):
 
     def setUp(self):
         self.reset_cells()
-        self.notebook_processor = NotebookProcessor(
-            processors=[self.processor], notebook=self.test_notebook
-        )
+        self.notebook_processor = NotebookProcessor(processors=[self.processor], notebook=self.test_notebook)
 
     def test_notebook_process(self):
         """
@@ -52,9 +50,7 @@ class TestProcess(unittest.TestCase):
             self.test_notebook.cells[1].source,
             "# This code has been processed!\ndef subtraction(a,b):\n  return a-b",
         )
-        self.assertEqual(
-            self.test_notebook.cells[2].source, "def multiplication(a,b):\n  return a*b"
-        )
+        self.assertEqual(self.test_notebook.cells[2].source, "def multiplication(a,b):\n  return a*b")
 
 
 class TestCodeNotes(unittest.TestCase):
@@ -74,22 +70,14 @@ class TestCodeNotes(unittest.TestCase):
 
     def setUp(self):
         self.reset_cells()
-        self.notebook_processor = NotebookProcessor(
-            processors=[self.processor], notebook=self.test_notebook
-        )
+        self.notebook_processor = NotebookProcessor(processors=[self.processor], notebook=self.test_notebook)
 
     def test_codenotes(self):
         self.notebook_processor.process_notebook()
-        self.assertEqual(
-            self.test_notebook.cells[1].source, "::: {.panel-tabset}\n\n## Code"
-        )
-        self.assertEqual(
-            self.test_notebook.cells[2].source, "def addition(a,b):\n  return a+b"
-        )
+        self.assertEqual(self.test_notebook.cells[1].source, "::: {.panel-tabset}\n\n## Code")
+        self.assertEqual(self.test_notebook.cells[2].source, "def addition(a,b):\n  return a+b")
         self.assertEqual(self.test_notebook.cells[3].source, "## Code & Explanation")
-        self.assertEqual(
-            self.test_notebook.cells[4].source, "def addition(a,b):\n  return a+b"
-        )
+        self.assertEqual(self.test_notebook.cells[4].source, "def addition(a,b):\n  return a+b")
         self.assertEqual(
             self.test_notebook.cells[5].source,
             (

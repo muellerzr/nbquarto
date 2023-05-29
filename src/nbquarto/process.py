@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import re
+
 from .foundation import AttributeDictionary
 from .utils import langs
-import re
+
 
 cell_magic = re.compile(r"^\s*%%\w+")
 
@@ -42,11 +44,7 @@ def first_code_line(code_list: list, regex_pattern: str = None, language="python
     if regex_pattern is None:
         regex_pattern = format_directive(language)
     for i, line in enumerate(code_list):
-        if (
-            line.strip() != ""
-            and not re.match(regex_pattern, line)
-            and not cell_magic.match(line)
-        ):
+        if line.strip() != "" and not re.match(regex_pattern, line) and not cell_magic.match(line):
             return i
     return None
 
@@ -106,9 +104,7 @@ def get_directive(content: str, language: str = "python"):
     return directive, args
 
 
-def extract_directives(
-    cell: AttributeDictionary, remove_directives: bool = True, language: str = None
-):
+def extract_directives(cell: AttributeDictionary, remove_directives: bool = True, language: str = None):
     """
     Extracts directives from a cell
 
@@ -129,8 +125,7 @@ def extract_directives(
             [
                 fix_quarto_directives(directive, language=language)
                 for directive in directives
-                if quarto_regex(language).match(directive)
-                or cell_magic.match(directive)
+                if quarto_regex(language).match(directive) or cell_magic.match(directive)
             ]
             + code
         )

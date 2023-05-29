@@ -1,0 +1,2 @@
+script:
+  - lua: extension/hello_world.lua

@@ -1,0 +1,5 @@
+output_folder: processed_notebooks
+processors: [
+  nbquarto.processors.example:BasicProcessor
+]
+  

@@ -10,7 +10,7 @@ setup(
     license='MIT',
     description='A minimal nbdev version, focused on writing quarto extensions',
     long_description=open('README.md').read(),
-    install_requires=[],
+    install_requires=["pyyaml"],
     extras_require=extras,
     keywords="quarto",
     url='https://github.com/muellerzr/nbquarto',
@@ -18,6 +18,11 @@ setup(
     package_dir = {'': 'src'},
     packages=find_packages(where='src'),
     python_requires='>=3.7',
+    entry_points={
+        "console_scripts": [
+            "nbquarto-process = nbquarto.cli:main"
+        ]
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

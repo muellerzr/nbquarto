@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Union, List
+from typing import List, Union
 
 from .foundation import AttributeDictionary
-from .notebook import read_notebook, notebook_language
-from .process import make_processors, extract_directives, is_directive
+from .notebook import notebook_language, read_notebook
+from .process import extract_directives, is_directive, make_processors
 
 
 class Processor:
@@ -60,17 +60,29 @@ class Processor:
         if not isinstance(self.cell_types, list):
             self.cell_types = [self.cell_types]
 
+    def has_directives(self, cell: AttributeDictionary) -> bool:
+        """
+        Checks if `cell` contains any directives in `self.directives`
+        """
+        return any(directive in cell.directives_ for directive in self.directives)
+
     def process(self, cell: AttributeDictionary):
         """
-        A function to apply on a cell.
+        A function to apply on a cell. Should use `self.has_directives`
+        to see if the processor should be applied
 
         Args:
             cell (`AttributeDictionary`):
                 A cell from a Jupyter Notebook
+
+        Example:
+        ```python
+        def process(self, cell):
+            if self.has_directives(self, cell):
+                cell.source = "Found a directive!"
+        ```
         """
-        raise NotImplementedError(
-            "You must implement the `process` method to apply this processor"
-        )
+        raise NotImplementedError("You must implement the `process` method to apply this processor")
 
     def process_cell(self, cell: AttributeDictionary):
         """
@@ -126,9 +138,7 @@ class NotebookProcessor:
         self.notebook = read_notebook(path) if notebook is None else notebook
         self.language = notebook_language(self.notebook)
         for cell in self.notebook.cells:
-            cell.directives_ = extract_directives(
-                cell, remove_directives=remove_directives, language=self.language
-            )
+            cell.directives_ = extract_directives(cell, remove_directives=remove_directives, language=self.language)
         self.processors = make_processors(processors, notebook=self.notebook)
         self.debug = debug
         self.remove_directives = remove_directives
@@ -164,17 +174,14 @@ class NotebookProcessor:
                 try:
                     self.process_cell(processor, cell)
                 except Exception as e:
-                    raise Exception(
-                        f"Error processing cell {cell.index_} with processor:"
-                        f" `{processor.__module__}.{processor.__class__.__name__}`. "
-                        "Please check earlier in the trace to see the true issue."
-                    ) from e
+                    msg = f"Error processing cell {cell.index_} with processor `{processor.__module__}.{processor.__class__.__name__}`:"
+                    msg = f"{msg} {e.args[0]}" if e.args else msg
+                    e.args = (msg,) + e.args[1:]
+                    raise
             if hasattr(processor, "end"):
                 processor.end()
             self.notebook.cells = [
-                cell
-                for cell in self.notebook.cells
-                if cell is not None and getattr(cell, "source", None) is not None
+                cell for cell in self.notebook.cells if cell is not None and getattr(cell, "source", None) is not None
             ]
             for i, cell in enumerate(self.notebook.cells):
                 cell.index_ = i

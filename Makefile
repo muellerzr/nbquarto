@@ -6,7 +6,7 @@ quality:
 
 style:
 	black $(check_dirs)
-	ruff $(check_dirs)
+	ruff $(check_dirs) --fix
 
 test:
 	pytest -sv ./tests

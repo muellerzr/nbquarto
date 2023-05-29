@@ -14,6 +14,7 @@
 
 import json
 from pathlib import Path
+
 from .foundation import AttributeDictionary
 from .utils import dict2obj
 
@@ -100,9 +101,7 @@ def write_notebook(notebook: AttributeDictionary, path: str):
             return list(map(_convert_notebook, d))
         if not isinstance(d, dict):
             return d
-        return dict(
-            **{k: _convert_notebook(v, k) for k, v in d.items() if k[-1] != "_"}
-        )
+        return dict(**{k: _convert_notebook(v, k) for k, v in d.items() if k[-1] != "_"})
 
     notebook = _convert_notebook(notebook)
     notebook = json.dumps(notebook, sort_keys=True, indent=1, ensure_ascii=False) + "\n"
@@ -124,9 +123,7 @@ def notebook_language(notebook: AttributeDictionary) -> str:
     return "python"
 
 
-def new_notebook(
-    cells: list = [], metadata: dict = {}, nbformat: int = 4, nbformat_minor: int = 5
-):
+def new_notebook(cells: list = [], metadata: dict = {}, nbformat: int = 4, nbformat_minor: int = 5):
     """
     Creates a new empty notebook
 
@@ -140,9 +137,7 @@ def new_notebook(
         nbformat_minor (`int`, *optional*, defaults to 5):
             The minor nbformat version of the notebook
     """
-    return dict2notebook(
-        cells=cells, metadata=metadata, nbformat=nbformat, nbformat_minor=nbformat_minor
-    )
+    return dict2notebook(cells=cells, metadata=metadata, nbformat=nbformat, nbformat_minor=nbformat_minor)
 
 
 def make_cell(text: str, cell_type: str = "code", **kwargs):
@@ -158,11 +153,7 @@ def make_cell(text: str, cell_type: str = "code", **kwargs):
             Additional arguments to pass to the cell, such as `metadata`
     """
     if cell_type not in ["code", "markdown", "raw"]:
-        raise ValueError(
-            f"cell_type must be one of 'code', 'markdown', or 'raw', not {cell_type}"
-        )
+        raise ValueError(f"cell_type must be one of 'code', 'markdown', or 'raw', not {cell_type}")
     metadata = kwargs.pop("metadata", {})
-    cell = dict(
-        cell_type=cell_type, source=text, directives_={}, metadata=metadata, **kwargs
-    )
+    cell = dict(cell_type=cell_type, source=text, directives_={}, metadata=metadata, **kwargs)
     return NotebookCell(0, cell)
