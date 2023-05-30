@@ -76,6 +76,8 @@ def get_signature_component(name, anchor, signature, object_doc, source_link=Non
     object_doc = _re_parameters.sub(lambda m: inside_example_finder_closure(m, "parameters"), object_doc)
 
     object_doc, parameters = regex_closure(object_doc, _re_parameters)
+    # TODO: Get these as part of the docstring that can be rendered.
+    # ... Check out `transformers` probably for ideas on it
     object_doc, return_description = regex_closure(object_doc, _re_returns)
     object_doc, returntype = regex_closure(object_doc, _re_returntype)
     object_doc, yield_description = regex_closure(object_doc, _re_yields)
