@@ -1,2 +1,12 @@
-script:
-  - lua: extension/hello_world.lua
+project:
+  type: website
+
+format:
+  html:
+    theme: 
+      - cosmo
+    toc: true
+    toc-depth: 4
+
+metadata-files:
+  - _sidebar.yml

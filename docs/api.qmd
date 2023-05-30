@@ -1,0 +1,1371 @@
+### `Accelerator` {#accelerate.Accelerator}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L130){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`device_placement`**: bool = True, **`split_batches`**: bool = False, **`mixed_precision`**: PrecisionType | str | None = None, **`gradient_accumulation_steps`**: int = 1, **`cpu`**: bool = False, **`deepspeed_plugin`**: DeepSpeedPlugin | None = None, **`fsdp_plugin`**: FullyShardedDataParallelPlugin | None = None, **`megatron_lm_plugin`**: MegatronLMPlugin | None = None, **`ipex_plugin`**: IntelPyTorchExtensionPlugin | None = None, **`rng_types`**: list[str | RNGType] | None = None, **`log_with`**: str | LoggerType | GeneralTracker | list[str | LoggerType | GeneralTracker] | None = None, **`project_dir`**: str | os.PathLike | None = None, **`project_config`**: ProjectConfiguration | None = None, **`logging_dir`**: str | os.PathLike | None = None, **`gradient_accumulation_plugin`**: GradientAccumulationPlugin | None = None, **`dispatch_batches`**: bool | None = None, **`even_batches`**: bool = True, **`step_scheduler_with_optimizer`**: bool = True, **`kwargs_handlers`**: list[KwargsHandler] | None = None, **`dynamo_backend`**: DynamoBackend | str | None = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **device_placement** (`bool`, *optional*, defaults to `True`) --
+  Whether or not the accelerator should put objects on device (tensors yielded by the dataloader, model,
+  etc...).
+- **split_batches** (`bool`, *optional*, defaults to `False`) --
+  Whether or not the accelerator should split the batches yielded by the dataloaders across the devices. If
+  `True` the actual batch size used will be the same on any kind of distributed processes, but it must be a
+  round multiple of the `num_processes` you are using. If `False`, actual batch size used will be the one set
+  in your script multiplied by the number of processes.
+- **mixed_precision** (`str`, *optional*) --
+  Whether or not to use mixed precision training. Choose from 'no','fp16','bf16 or 'fp8'. Will default to the
+  value in the environment variable `ACCELERATE_MIXED_PRECISION`, which will use the default value in the
+  accelerate config of the current system or the flag passed with the `accelerate.launch` command. 'fp16'
+  requires pytorch 1.6 or higher. 'bf16' requires pytorch 1.10 or higher. 'fp8' requires the installation of
+  transformers-engine.
+- **gradient_accumulation_steps** (`int`, *optional*, default to 1) --
+  The number of steps that should pass before gradients are accumulated. A number > 1 should be combined with
+  `Accelerator.accumulate`. If not passed, will default to the value in the environment variable
+  `ACCELERATE_GRADIENT_ACCUMULATION_STEPS`. Can also be configured through a `GradientAccumulationPlugin`.
+- **cpu** (`bool`, *optional*) --
+  Whether or not to force the script to execute on CPU. Will ignore GPU available if set to `True` and force
+  the execution on one process only.
+- **deepspeed_plugin** (`DeepSpeedPlugin`, *optional*) --
+  Tweak your DeepSpeed related args using this argument. This argument is optional and can be configured
+  directly using *accelerate config*
+- **fsdp_plugin** (`FullyShardedDataParallelPlugin`, *optional*) --
+  Tweak your FSDP related args using this argument. This argument is optional and can be configured directly
+  using *accelerate config*
+- **megatron_lm_plugin** (`MegatronLMPlugin`, *optional*) --
+  Tweak your MegatronLM related args using this argument. This argument is optional and can be configured
+  directly using *accelerate config*
+- **ipex_plugin** (`IntelExtensionPlugin`, *optional*) --
+  Tweak your Intel Extension for PyTorch related args using this argument. This argument is optional and can
+  be configured directly using *accelerate config*
+- **rng_types** (list of `str` or [`~utils.RNGType`]) --
+  The list of random number generators to synchronize at the beginning of each iteration in your prepared
+  dataloaders. Should be one or several of:
+
+  - `"torch"`: the base torch random number generator
+  - `"cuda"`: the CUDA random number generator (GPU only)
+  - `"xla"`: the XLA random number generator (TPU only)
+  - `"generator"`: the `torch.Generator` of the sampler (or batch sampler if there is no sampler in your
+    dataloader) or of the iterable dataset (if it exists) if the underlying dataset is of that type.
+
+  Will default to `["torch"]` for PyTorch versions &amp;lt;=1.5.1 and `["generator"]` for PyTorch versions >= 1.6.
+- **log_with** (list of `str`, [`~utils.LoggerType`] or [`~tracking.GeneralTracker`], *optional*) --
+  A list of loggers to be setup for experiment tracking. Should be one or several of:
+
+  - `"all"`
+  - `"tensorboard"`
+  - `"wandb"`
+  - `"comet_ml"`
+  If `"all"` is selected, will pick up all available trackers in the environment and initialize them. Can
+  also accept implementations of `GeneralTracker` for custom trackers, and can be combined with `"all"`.
+- **project_config** (`ProjectConfiguration`, *optional*) --
+  A configuration for how saving the state can be handled.
+- **project_dir** (`str`, `os.PathLike`, *optional*) --
+  A path to a directory for storing data such as logs of locally-compatible loggers and potentially saved
+  checkpoints.
+- **dispatch_batches** (`bool`, *optional*) --
+  If set to `True`, the dataloader prepared by the Accelerator is only iterated through on the main process
+  and then the batches are split and broadcast to each process. Will default to `True` for `DataLoader` whose
+  underlying dataset is an `IterableDataset`, `False` otherwise.
+- **even_batches** (`bool`, *optional*, defaults to `True`) --
+  If set to `True`, in cases where the total batch size across all processes does not exactly divide the
+  dataset, samples at the start of the dataset will be duplicated so the batch can be divided equally among
+  all workers.
+- **step_scheduler_with_optimizer** (`bool`, *optional`, defaults to `True`) --
+  Set `True` if the learning rate scheduler is stepped at the same time as the optimizer, `False` if only
+  done under certain circumstances (at the end of each epoch, for instance).
+- **kwargs_handlers** (`list[KwargHandler]`, *optional*) --
+  A list of `KwargHandler` to customize how the objects related to distributed training or mixed precision
+  are created. See [kwargs](kwargs) for more information.
+- **dynamo_backend** (`str` or `DynamoBackend`, *optional*, defaults to `"no"`) --
+  Set to one of the possible dynamo backends to optimize your training with torch dynamo.
+- **gradient_accumulation_plugin** (`GradientAccumulationPlugin`, *optional*) --
+  A configuration for how gradient accumulation should be handled, if more tweaking than just the
+  `gradient_accumulation_steps` is needed.
+
+Creates an instance of an accelerator for distributed training (on multi-GPU, TPU) or mixed precision training.
+
+
+
+**Available attributes:**
+
+- **device** (`torch.device`) -- The device to use.
+- **distributed_type** (`~utils.DistributedType`) -- The distributed training configuration.
+- **local_process_index** (`int`) -- The process index on the current machine.
+- **mixed_precision** (`str`) -- The configured mixed precision mode.
+- **num_processes** (`int`) -- The total number of processes used for training.
+- **optimizer_step_was_skipped** (`bool`) -- Whether or not the optimizer update was skipped (because of
+  gradient overflow in mixed precision), in which
+case the learning rate should not be changed.
+- **process_index** (`int`) -- The overall index of the current process among all processes.
+- **state** (`~state.AcceleratorState`) -- The distributed setup state.
+- **sync_gradients** (`bool`) -- Whether the gradients are currently being synced across all processes.
+- **use_distributed** (`bool`) -- Whether the current configuration is for distributed training.
+
+</div>
+#### `accumulate` {#accelerate.Accelerator.accumulate}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L852){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`model`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **model** (`torch.nn.Module`) --
+  PyTorch Module that was prepared with `Accelerator.prepare`
+
+A context manager that will lightly wrap around and perform gradient accumulation automatically
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator(gradient_accumulation_steps=1)
+>>> dataloader, model, optimizer, scheduler = accelerator.prepare(dataloader, model, optimizer, scheduler)
+
+>>> for input, output in dataloader:
+...     with accelerator.accumulate(model):
+...         outputs = model(input)
+...         loss = loss_func(outputs)
+...         loss.backward()
+...         optimizer.step()
+...         scheduler.step()
+...         optimizer.zero_grad()
+```
+
+</div>
+
+#### `autocast` {#accelerate.Accelerator.autocast}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2643){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`cache_enabled`**: bool = False)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Will apply automatic mixed-precision inside the block inside this context manager, if it is enabled. Nothing
+different will happen otherwise.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator(mixed_precision="fp16")
+>>> with accelerator.autocast():
+...     train()
+```
+
+</div>
+
+#### `backward` {#accelerate.Accelerator.backward}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1717){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`loss`**, **`**kwargs`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Scales the gradients in accordance to the `GradientAccumulationPlugin` and calls the correct `backward()` based
+on the configuration.
+
+Should be used in lieu of `loss.backward()`.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator(gradient_accumulation_steps=2)
+>>> outputs = model(inputs)
+>>> loss = loss_fn(outputs, labels)
+>>> accelerator.backward(loss)
+```
+
+</div>
+
+#### `clear` {#accelerate.Accelerator.clear}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2511){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+()
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Alias for `Accelerate.free_memory`, releases all references to the internal objects stored and call the
+garbage collector. You should call this method between two trainings with different models/optimizers.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> model, optimizer, scheduler = ...
+>>> model, optimizer, scheduler = accelerator.prepare(model, optimizer, scheduler)
+>>> accelerator.free_memory()
+>>> del model, optimizer, scheduler
+```
+
+</div>
+
+#### `clip_grad_norm_` {#accelerate.Accelerator.clip_grad_norm_}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1782){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`parameters`**, **`max_norm`**, **`norm_type`** = 2)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Should be used in place of `torch.nn.utils.clip_grad_norm_`.
+
+
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator(gradient_accumulation_steps=2)
+>>> dataloader, model, optimizer, scheduler = accelerator.prepare(dataloader, model, optimizer, scheduler)
+
+>>> for input, target in dataloader:
+...     optimizer.zero_grad()
+...     output = model(input)
+...     loss = loss_func(output, target)
+...     accelerator.backward(loss)
+...     if accelerator.sync_gradients:
+...         accelerator.clip_grad_norm_(model.parameters(), max_grad_norm)
+...     optimizer.step()
+```
+
+</div>
+
+#### `clip_grad_value_` {#accelerate.Accelerator.clip_grad_value_}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1820){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`parameters`**, **`clip_value`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Should be used in place of `torch.nn.utils.clip_grad_value_`.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator(gradient_accumulation_steps=2)
+>>> dataloader, model, optimizer, scheduler = accelerator.prepare(dataloader, model, optimizer, scheduler)
+
+>>> for input, target in dataloader:
+...     optimizer.zero_grad()
+...     output = model(input)
+...     loss = loss_func(output, target)
+...     accelerator.backward(loss)
+...     if accelerator.sync_gradients:
+...         accelerator.clip_grad_value_(model.parameters(), clip_value)
+...     optimizer.step()
+```
+
+</div>
+
+#### `free_memory` {#accelerate.Accelerator.free_memory}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2487){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+()
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Will release all references to the internal objects stored and call the garbage collector. You should call this
+method between two trainings with different models/optimizers.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> model, optimizer, scheduler = ...
+>>> model, optimizer, scheduler = accelerator.prepare(model, optimizer, scheduler)
+>>> accelerator.free_memory()
+>>> del model, optimizer, scheduler
+```
+
+</div>
+
+#### `gather` {#accelerate.Accelerator.gather}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1847){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`tensor`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **tensor** (`torch.Tensor`, or a nested tuple/list/dictionary of `torch.Tensor`) --
+  The tensors to gather across all processes.
+
+Gather the values in *tensor* across all processes and concatenate them on the first dimension. Useful to
+regroup the predictions from all processes when doing evaluation.
+
+Note:
+This gather happens in all processes.
+
+
+
+
+
+
+
+Example:
+
+```python
+>>> # Assuming four processes
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> process_tensor = torch.tensor([accelerator.process_index])
+>>> gathered_tensor = accelerator.gather(process_tensor)
+>>> gathered_tensor
+tensor([0, 1, 2, 3])
+```
+
+</div>
+
+#### `gather_for_metrics` {#accelerate.Accelerator.gather_for_metrics}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1879){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`tensor`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **tensor** (`torch.Tensor`, or a nested tuple/list/dictionary of `torch.Tensor`) --
+  The tensors for calculating metrics across all processes.
+
+Gathers `tensor` and potentially drops duplicates in the last batch if on a distributed system. Should be used
+for gathering the inputs and targets for metric calculation.
+
+
+
+Example:
+
+```python
+>>> # Assuming two processes, with a batch size of 5 on a dataset with 9 samples
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> dataloader = torch.utils.data.DataLoader(range(9), batch_size=5)
+>>> dataloader = accelerator.prepare(dataloader)
+>>> batch = next(iter(dataloader))
+>>> gathered_items = accelerator.gather_for_metrics(batch)
+>>> len(gathered_items)
+9
+```
+
+</div>
+
+#### `get_state_dict` {#accelerate.Accelerator.get_state_dict}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2555){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`model`**, **`unwrap`** = True)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **model** (`torch.nn.Module`) --
+  A PyTorch model sent through [`Accelerator.prepare`]
+- **unwrap** (`bool`, *optional*, defaults to `True`) --
+  Whether to return the original underlying state_dict of `model` or to return the wrapped state_dict
+
+Returns the state dictionary of a model sent through `Accelerator.prepare` potentially without full
+precision.
+
+
+
+
+
+
+
+Example:
+
+```python
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> net = torch.nn.Linear(2, 2)
+>>> net = accelerator.prepare(net)
+>>> state_dict = accelerator.get_state_dict(net)
+```
+
+</div>
+
+#### `get_tracker` {#accelerate.Accelerator.get_tracker}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2101){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`name`**: str, **`unwrap`**: bool = False)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **name** (`str`) --
+  The name of a tracker, corresponding to the `.name` property.
+- **unwrap** (`bool`) --
+  Whether to return the internal tracking mechanism or to return the wrapped tracker instead
+  (recommended).
+
+Returns a `tracker` from `self.trackers` based on `name` on the main process only.
+
+
+
+
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator(log_with="tensorboard")
+>>> accelerator.init_trackers("my_project")
+>>> tensorboard_tracker = accelerator.get_tracker("tensorboard")
+```
+
+</div>
+
+#### `join_uneven_inputs` {#accelerate.Accelerator.join_uneven_inputs}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L888){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`joinables`**, **`even_batches`** = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **joinables** (`list[torch.distributed.algorithms.Joinable]`) --
+  A list of models or optimizers that subclass `torch.distributed.algorithms.Joinable`. Most commonly, a
+  PyTorch Module that was prepared with `Accelerator.prepare` for DistributedDataParallel training.
+- **even_batches** (`bool`, *optional*) --
+  If set, this will override the value of `even_batches` set in the `Accelerator`. If it is not provided,
+  the default `Accelerator` value wil be used.
+
+A context manager that facilitates distributed training or evaluation on uneven inputs, which acts as a wrapper
+around `torch.distributed.algorithms.join`. This is useful when the total batch size does not evenly divide the
+length of the dataset.
+
+
+
+<Tip warning={true}>
+
+`join_uneven_inputs` is only supported for Distributed Data Parallel training on multiple GPUs. For any other
+configuration, this method will have no effect.
+
+</Tip>
+
+<Tip warning={true}>
+
+Overidding `even_batches` will not affect iterable-style data loaders.
+
+</Tip>
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator(even_batches=True)
+>>> ddp_model, optimizer, dataloader = accelerator.prepare(model, optimizer, dataloader)
+
+>>> with accelerator.join_uneven_inputs([ddp_model], even_batches=False):
+...     for input, output in dataloader:
+...         outputs = model(input)
+...         loss = loss_func(outputs)
+...         loss.backward()
+...         optimizer.step()
+...         optimizer.zero_grad()
+```
+
+</div>
+
+#### `load_state` {#accelerate.Accelerator.load_state}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2380){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`input_dir`**: str, **`**load_model_func_kwargs`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **input_dir** (`str` or `os.PathLike`) --
+  The name of the folder all relevant weights and states were saved in.
+- **load_model_func_kwargs** (`dict`, *optional*) --
+  Additional keyword arguments for loading model which can be passed to the underlying load function,
+  such as optional arguments for DeepSpeed's `load_checkpoint` function or a `map_location` to load the
+  model and optimizer on.
+
+Loads the current states of the model, optimizer, scaler, RNG generators, and registered objects.
+
+<Tip>
+
+Should only be used in conjunction with `Accelerator.save_state`.
+
+</Tip>
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> model, optimizer, lr_scheduler = ...
+>>> model, optimizer, lr_scheduler = accelerator.prepare(model, optimizer, lr_scheduler)
+>>> accelerator.load_state("my_checkpoint")
+```
+
+</div>
+
+#### `local_main_process_first` {#accelerate.Accelerator.local_main_process_first}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L764){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+()
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Lets the local main process go inside a with block.
+
+The other processes will enter the with block after the main process exits.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> with accelerator.local_main_process_first():
+...     # This will be printed first by local process 0 then in a seemingly
+...     # random order by the other processes.
+...     print(f"This will be printed by process &amp;lcub;accelerator.local_process_index}")
+```
+
+</div>
+
+#### `main_process_first` {#accelerate.Accelerator.main_process_first}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L742){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+()
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Lets the main process go first inside a with block.
+
+The other processes will enter the with block after the main process exits.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> with accelerator.main_process_first():
+...     # This will be printed first by process 0 then in a seemingly
+...     # random order by the other processes.
+...     print(f"This will be printed by process &amp;lcub;accelerator.process_index}")
+```
+
+</div>
+
+#### `no_sync` {#accelerate.Accelerator.no_sync}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L786){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`model`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **model** (`torch.nn.Module`) --
+  PyTorch Module that was prepared with `Accelerator.prepare`
+
+A context manager to disable gradient synchronizations across DDP processes by calling
+`torch.nn.parallel.DistributedDataParallel.no_sync`.
+
+If `model` is not in DDP, this context manager does nothing
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> dataloader, model, optimizer = accelerator.prepare(dataloader, model, optimizer)
+>>> input_a = next(iter(dataloader))
+>>> input_b = next(iter(dataloader))
+
+>>> with accelerator.no_sync():
+...     outputs = model(input_a)
+...     loss = loss_func(outputs)
+...     accelerator.backward(loss)
+...     # No synchronization across processes, only accumulate gradients
+>>> outputs = model(input_b)
+>>> accelerator.backward(loss)
+>>> # Synchronization across all processes
+>>> optimizer.step()
+>>> optimizer.zero_grad()
+```
+
+</div>
+
+#### `on_last_process` {#accelerate.Accelerator.on_last_process}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L610){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`function`**: Callable[..., Any])
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **function** (`Callable`) -- The function to decorate.
+
+A decorator that will run the decorated function on the last process only. Can also be called using the
+`PartialState` class.
+
+
+
+Example:
+```python
+# Assume we have 4 processes.
+from accelerate import Accelerator
+
+accelerator = Accelerator()
+
+
+@accelerator.on_last_process
+def print_something():
+    print(f"Printed on process &amp;lcub;accelerator.process_index}")
+
+
+print_something()
+"Printed on process 3"
+```
+
+</div>
+
+#### `on_local_main_process` {#accelerate.Accelerator.on_local_main_process}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L568){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`function`**: Callable[..., Any] = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **function** (`Callable`) -- The function to decorate.
+
+A decorator that will run the decorated function on the local main process only. Can also be called using the
+`PartialState` class.
+
+
+
+Example:
+```python
+# Assume we have 2 servers with 4 processes each.
+from accelerate import Accelerator
+
+accelerator = Accelerator()
+
+
+@accelerator.on_local_main_process
+def print_something():
+    print("This will be printed by process 0 only on each server.")
+
+
+print_something()
+# On server 1:
+"This will be printed by process 0 only"
+# On server 2:
+"This will be printed by process 0 only"
+```
+
+</div>
+
+#### `on_local_process` {#accelerate.Accelerator.on_local_process}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L694){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`function`**: Callable[..., Any] = None, **`local_process_index`**: int = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **function** (`Callable`, *optional*) --
+  The function to decorate.
+- **local_process_index** (`int`, *optional*) --
+  The index of the local process on which to run the function.
+
+A decorator that will run the decorated function on a given local process index only. Can also be called using
+the `PartialState` class.
+
+
+
+Example:
+```python
+# Assume we have 2 servers with 4 processes each.
+from accelerate import Accelerator
+
+accelerator = Accelerator()
+
+
+@accelerator.on_local_process(local_process_index=2)
+def print_something():
+    print(f"Printed on process &amp;lcub;accelerator.local_process_index}")
+
+
+print_something()
+# On server 1:
+"Printed on process 2"
+# On server 2:
+"Printed on process 2"
+```
+
+</div>
+
+#### `on_main_process` {#accelerate.Accelerator.on_main_process}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L529){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`function`**: Callable[..., Any] = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **function** (`Callable`) -- The function to decorate.
+
+A decorator that will run the decorated function on the main process only. Can also be called using the
+`PartialState` class.
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+
+
+>>> @accelerator.on_main_process
+... def print_something():
+...     print("This will be printed by process 0 only.")
+
+
+>>> print_something()
+"This will be printed by process 0 only"
+```
+
+</div>
+
+#### `on_process` {#accelerate.Accelerator.on_process}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L649){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`function`**: Callable[..., Any] = None, **`process_index`**: int = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **function** (`Callable`, `optional`) --
+  The function to decorate.
+- **process_index** (`int`, `optional`) --
+  The index of the process on which to run the function.
+
+A decorator that will run the decorated function on a given process index only. Can also be called using the
+`PartialState` class.
+
+
+
+Example:
+```python
+# Assume we have 4 processes.
+from accelerate import Accelerator
+
+accelerator = Accelerator()
+
+
+@accelerator.on_process(process_index=2)
+def print_something():
+    print(f"Printed on process &amp;lcub;accelerator.process_index}")
+
+
+print_something()
+"Printed on process 2"
+```
+
+</div>
+
+#### `pad_across_processes` {#accelerate.Accelerator.pad_across_processes}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1961){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`tensor`**, **`dim`** = 0, **`pad_index`** = 0, **`pad_first`** = False)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **tensor** (nested list/tuple/dictionary of `torch.Tensor`) --
+  The data to gather.
+- **dim** (`int`, *optional*, defaults to 0) --
+  The dimension on which to pad.
+- **pad_index** (`int`, *optional*, defaults to 0) --
+  The value with which to pad.
+- **pad_first** (`bool`, *optional*, defaults to `False`) --
+  Whether to pad at the beginning or the end.
+
+Recursively pad the tensors in a nested list/tuple/dictionary of tensors from all devices to the same size so
+they can safely be gathered.
+
+
+
+
+
+
+
+Example:
+
+```python
+>>> # Assuming two processes, with the first processes having a tensor of size 1 and the second of size 2
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> process_tensor = torch.arange(accelerator.process_index + 1).to(accelerator.device)
+>>> padded_tensor = accelerator.pad_across_processes(process_tensor)
+>>> padded_tensor.shape
+torch.Size([2])
+```
+
+</div>
+
+#### `prepare` {#accelerate.Accelerator.prepare}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1052){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`*args`**, **`device_placement`** = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- ***args** (list of objects) --
+  Any of the following type of objects:
+
+  - `torch.utils.data.DataLoader`: PyTorch Dataloader
+  - `torch.nn.Module`: PyTorch Module
+  - `torch.optim.Optimizer`: PyTorch Optimizer
+  - `torch.optim.lr_scheduler.LRScheduler`: PyTorch LR Scheduler
+
+- **device_placement** (`list[bool]`, *optional*) --
+  Used to customize whether automatic device placement should be performed for each object passed. Needs
+  to be a list of the same length as `args`.
+
+Prepare all objects passed in `args` for distributed training and mixed precision, then return them in the same
+order.
+
+
+
+<Tip>
+
+You don't need to prepare a model if you only use it for inference without any kind of mixed precision
+
+</Tip>
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> # Assume a model, optimizer, data_loader and scheduler are defined
+>>> model, optimizer, data_loader, scheduler = accelerator.prepare(model, optimizer, data_loader, scheduler)
+```
+
+</div>
+
+#### `prepare_data_loader` {#accelerate.Accelerator.prepare_data_loader}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1614){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`data_loader`**: torch.utils.data.DataLoader, **`device_placement`** = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **data_loader** (`torch.utils.data.DataLoader`) --
+  A vanilla PyTorch DataLoader to prepare
+- **device_placement** (`bool`, *optional*) --
+  Whether or not to place the batches on the proper device in the prepared dataloader. Will default to
+  `self.device_placement`.
+
+Prepares a PyTorch DataLoader for training in any distributed setup. It is recommended to use
+`Accelerator.prepare` instead.
+
+
+
+Example:
+
+```python
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> data_loader = torch.utils.data.DataLoader(...)
+>>> data_loader = accelerator.prepare_data_loader(data_loader, device_placement=True)
+```
+
+</div>
+
+#### `prepare_model` {#accelerate.Accelerator.prepare_model}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1163){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`model`**: torch.nn.Module, **`device_placement`** = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **model** (`torch.nn.Module`) --
+  A PyTorch model to prepare. You don't need to prepare a model if it is used only for inference without
+  any kind of mixed precision
+- **device_placement** (`bool`, *optional*) --
+  Whether or not to place the model on the proper device. Will default to `self.device_placement`.
+
+Prepares a PyTorch model for training in any distributed setup. It is recommended to use
+`Accelerator.prepare` instead.
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> # Assume a model is defined
+>>> model = accelerator.prepare_model(model)
+```
+
+</div>
+
+#### `prepare_optimizer` {#accelerate.Accelerator.prepare_optimizer}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1653){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`optimizer`**: torch.optim.Optimizer, **`device_placement`** = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **optimizer** (`torch.optim.Optimizer`) --
+  A vanilla PyTorch optimizer to prepare
+- **device_placement** (`bool`, *optional*) --
+  Whether or not to place the optimizer on the proper device. Will default to `self.device_placement`.
+
+Prepares a PyTorch Optimizer for training in any distributed setup. It is recommended to use
+`Accelerator.prepare` instead.
+
+
+
+Example:
+
+```python
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> optimizer = torch.optim.Adam(...)
+>>> optimizer = accelerator.prepare_optimizer(optimizer, device_placement=True)
+```
+
+</div>
+
+#### `prepare_scheduler` {#accelerate.Accelerator.prepare_scheduler}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1681){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`scheduler`**: LRScheduler)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **scheduler** (`torch.optim.lr_scheduler.LRScheduler`) --
+  A vanilla PyTorch scheduler to prepare
+
+Prepares a PyTorch Scheduler for training in any distributed setup. It is recommended to use
+`Accelerator.prepare` instead.
+
+
+
+Example:
+
+```python
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> optimizer = torch.optim.Adam(...)
+>>> scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, ...)
+>>> scheduler = accelerator.prepare_scheduler(scheduler)
+```
+
+</div>
+
+#### `print` {#accelerate.Accelerator.print}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L974){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`*args`**, **`**kwargs`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Drop in replacement of `print()` to only print once per server.
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> accelerator.print("Hello world!")
+```
+
+</div>
+
+#### `reduce` {#accelerate.Accelerator.reduce}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1927){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`tensor`**, **`reduction`** = 'sum')
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **tensor** (`torch.Tensor`, or a nested tuple/list/dictionary of `torch.Tensor`) --
+  The tensors to reduce across all processes.
+- **reduction** (`str`, *optional*, defaults to "sum") --
+  A reduction type, can be one of 'sum', 'mean', or 'none'. If 'none', will not perform any operation.
+
+Reduce the values in *tensor* across all processes based on *reduction*.
+
+Note:
+All processes get the reduced value.
+
+
+
+
+
+
+
+Example:
+
+```python
+>>> # Assuming two processes
+>>> import torch
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> process_tensor = torch.arange(accelerator.num_processes) + 1 + (2 * accelerator.process_index)
+>>> process_tensor = process_tensor.to(accelerator.device)
+>>> reduced_tensor = accelerator.reduce(process_tensor, reduction="sum")
+>>> reduced_tensor
+tensor([4, 6])
+```
+
+</div>
+
+#### `register_for_checkpointing` {#accelerate.Accelerator.register_for_checkpointing}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2607){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`*objects`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Makes note of `objects` and will save or load them in during `save_state` or `load_state`.
+
+These should be utilized when the state is being loaded or saved in the same script. It is not designed to be
+used in different scripts.
+
+<Tip>
+
+Every `object` must have a `load_state_dict` and `state_dict` function to be stored.
+
+</Tip>
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> # Assume `CustomObject` has a `state_dict` and `load_state_dict` function.
+>>> obj = CustomObject()
+>>> accelerator.register_for_checkpointing(obj)
+>>> accelerator.save_state("checkpoint.pt")
+```
+
+</div>
+
+#### `register_load_state_pre_hook` {#accelerate.Accelerator.register_load_state_pre_hook}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2349){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`hook`**: Callable[..., None])
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **hook** (`Callable`) --
+  A function to be called in [`Accelerator.load_state`] before `load_checkpoint`.
+
+Registers a pre hook to be run before `load_checkpoint` is called in `Accelerator.load_state`.
+
+
+
+The hook should have the following signature:
+
+`hook(models: list[torch.nn.Module], input_dir: str) -> None`
+
+The `models` argument are the models as saved in the accelerator state under `accelerator._models`, and the
+`input_dir` argument is the `input_dir` argument passed to `Accelerator.load_state`.
+
+<Tip>
+
+Should only be used in conjunction with `Accelerator.register_save_state_pre_hook`. Can be useful to load
+configurations in addition to model weights. Can also be used to overwrite model loading with a customized
+method. In this case, make sure to remove already loaded models from the models list.
+
+</Tip>
+
+
+
+
+
+</div>
+
+#### `register_save_state_pre_hook` {#accelerate.Accelerator.register_save_state_pre_hook}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2203){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`hook`**: Callable[..., None])
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **hook** (`Callable`) --
+  A function to be called in [`Accelerator.save_state`] before `save_checkpoint`.
+
+Registers a pre hook to be run before `save_checkpoint` is called in `Accelerator.save_state`.
+
+
+
+The hook should have the following signature:
+
+`hook(models: list[torch.nn.Module], weights: list[dict[str, torch.Tensor]], input_dir: str) -> None`
+
+The `models` argument are the models as saved in the accelerator state under `accelerator._models`, `weigths`
+argument are the state dicts of the `models`, and the `input_dir` argument is the `input_dir` argument passed
+to `Accelerator.load_state`.
+
+<Tip>
+
+Should only be used in conjunction with `Accelerator.register_load_state_pre_hook`. Can be useful to save
+configurations in addition to model weights. Can also be used to overwrite model saving with a customized
+method. In this case, make sure to remove already loaded weights from the weights list.
+
+</Tip>
+
+
+
+
+
+</div>
+
+#### `save` {#accelerate.Accelerator.save}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2183){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`obj`**, **`f`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **obj** (`object`) -- The object to save.
+- **f** (`str` or `os.PathLike`) -- Where to save the content of `obj`.
+
+Save the object passed to disk once per machine. Use in place of `torch.save`.
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> arr = [0, 1, 2, 3]
+>>> accelerator.save(arr, "array.pkl")
+```
+
+</div>
+
+#### `save_state` {#accelerate.Accelerator.save_state}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2235){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`output_dir`**: str = None, **`**save_model_func_kwargs`**)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **output_dir** (`str` or `os.PathLike`) --
+  The name of the folder to save all relevant weights and states.
+- **save_model_func_kwargs** (`dict`, *optional*) --
+  Additional keyword arguments for saving model which can be passed to the underlying save function, such
+  as optional arguments for DeepSpeed's `save_checkpoint` function.
+
+Saves the current states of the model, optimizer, scaler, RNG generators, and registered objects to a folder.
+
+If a `ProjectConfiguration` was passed to the `Accelerator` object with `automatic_checkpoint_naming` enabled
+then checkpoints will be saved to `self.project_dir/checkpoints`. If the number of current saves is greater
+than `total_limit` then the oldest save is deleted. Each checkpoint is saved in seperate folders named
+`checkpoint_&amp;lt;iteration>`.
+
+Otherwise they are just saved to `output_dir`.
+
+<Tip>
+
+Should only be used when wanting to save a checkpoint during training and restoring the state in the same
+environment.
+
+</Tip>
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> model, optimizer, lr_scheduler = ...
+>>> model, optimizer, lr_scheduler = accelerator.prepare(model, optimizer, lr_scheduler)
+>>> accelerator.save_state(output_dir="my_checkpoint")
+```
+
+</div>
+
+#### `skip_first_batches` {#accelerate.Accelerator.skip_first_batches}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2675){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`dataloader`**, **`num_batches`**: int = 0)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **dataloader** (`torch.utils.data.DataLoader`) -- The data loader in which to skip batches.
+- **num_batches** (`int`, *optional*, defaults to 0) -- The number of batches to skip
+
+Creates a new `torch.utils.data.DataLoader` that will efficiently skip the first `num_batches`.
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> dataloader, model, optimizer, scheduler = accelerator.prepare(dataloader, model, optimizer, scheduler)
+
+>>> for input, target in accelerator.skip_first_batches(dataloader, num_batches=2):
+...     optimizer.zero_grad()
+...     output = model(input)
+...     loss = loss_func(output, target)
+...     accelerator.backward(loss)
+...     optimizer.step()
+```
+
+</div>
+
+#### `unscale_gradients` {#accelerate.Accelerator.unscale_gradients}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1747){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`optimizer`** = None)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **optimizer** (`torch.optim.Optimizer` or `list[torch.optim.Optimizer]`, *optional*) --
+  The optimizer(s) for which to unscale gradients. If not set, will unscale gradients on all optimizers
+  that were passed to [`~Accelerator.prepare`].
+
+Unscale the gradients in mixed precision training with AMP. This is a noop in all other settings.
+
+Likely should be called through `Accelerator.clip_grad_norm_` or `Accelerator.clip_grad_value_`
+
+
+
+Example:
+
+```python
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> model, optimizer = accelerator.prepare(model, optimizer)
+>>> outputs = model(inputs)
+>>> loss = loss_fn(outputs, labels)
+>>> accelerator.backward(loss)
+>>> accelerator.unscale_gradients(optimizer=optimizer)
+```
+
+</div>
+
+#### `unwrap_model` {#accelerate.Accelerator.unwrap_model}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L1996){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`model`**, **`keep_fp32_wrapper`**: bool = True)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
+- **model** (`torch.nn.Module`) --
+  The model to unwrap.
+- **keep_fp32_wrapper** (`bool`, *optional*, defaults to `True`) --
+  Whether to not remove the mixed precision hook if it was added.
+
+Unwraps the `model` from the additional layer possible added by `~Accelerator.prepare`. Useful before saving
+the model.
+
+
+
+
+
+
+
+Example:
+
+```python
+>>> # Assuming two GPU processes
+>>> from torch.nn.parallel import DistributedDataParallel
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> model = accelerator.prepare(MyModel())
+>>> print(model.__class__.__name__)
+DistributedDataParallel
+
+>>> model = accelerator.unwrap_model(model)
+>>> print(model.__class__.__name__)
+MyModel
+```
+
+</div>
+
+#### `wait_for_everyone` {#accelerate.Accelerator.wait_for_everyone}
+[\<source\>](https://github.com/huggingface/accelerate/blob/main/src/accelerate/accelerator.py#L2029){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+()
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+Will stop the execution of the current process until every other process has reached that point (so this does
+nothing when the script is only run in one process). Useful to do before saving a model.
+
+Example:
+
+```python
+>>> # Assuming two GPU processes
+>>> import time
+>>> from accelerate import Accelerator
+
+>>> accelerator = Accelerator()
+>>> if accelerator.is_main_process:
+...     time.sleep(2)
+>>> else:
+...     print("I'm waiting for the main process to finish its sleep...")
+>>> accelerator.wait_for_everyone()
+>>> # Should print on every process at the same time
+>>> print("Everyone is here")
+```
+
+</div>
