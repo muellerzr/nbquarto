@@ -228,3 +228,33 @@ def autodoc(object_name, package, methods=None, return_anchors=False, page_info=
             documentation += f"\n#{method_doc}\n"
 
     return documentation
+
+"""
+How should the process API look?
+
+Native autodoc:
+
+Base:
+[[autodoc]] somemodule.SomeObject
+
+#| autodoc somemodule.SomeObject
+
+Specificity:
+[[autodoc]] somemodule.SomeObject
+    - method_1
+    - method_2
+    - method_3
+
+Options:
+
+#| autodoc: somemodule.SomeObject
+#| methods: [method_1, method_2, method_3]
+
+Including magic methods like `__call__` or private methods, and all public methods:
+[[autodoc]] somemodule.SomeObject
+    - all
+    - __call__
+
+#| autodoc: somemodule.SomeObject
+#| methods: [all, __call__]
+"""
