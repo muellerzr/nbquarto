@@ -4,7 +4,7 @@ import os
 
 import yaml
 
-from .notebook import read_notebook, write_notebook
+from .notebook import write_notebook
 from .processor import NotebookProcessor
 
 
