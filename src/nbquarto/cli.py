@@ -1,6 +1,6 @@
 import argparse
 import logging
-import os
+from pathlib import Path, PurePosixPath
 
 import yaml
 
@@ -65,7 +65,7 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
         processors[i] = getattr(module, class_name)
 
     # Process and save the new notebook
-    logger.info(f"Processing notebook with processors: {processors}")
+    logger.debug(f"Processing notebook {notebook_location} with processors: {processors}")
     notebook_processor = NotebookProcessor(notebook_location, processors=processors, config=config)
     notebook_processor.process_notebook()
     if output_folder is None:
@@ -76,11 +76,14 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
             output_folder = "processed"
         else:
             output_folder = config.get("output_folder")
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-    output_location = os.path.join(output_folder, os.path.basename(notebook_location))
+    documentation_source = config.get("documentation_source", "nbs")
+    output_folder = PurePosixPath(output_folder)
+    notebook_location = PurePosixPath(notebook_location)
+
+    output_location = output_folder / notebook_location.relative_to(documentation_source)
+    Path(output_location.parent).mkdir(parents=True, exist_ok=True)
     write_notebook(notebook_processor.notebook, output_location)
-    logger.info(f"Successfully processed notebook at {notebook_location} and saved to {output_location}")
+    logger.debug(f"Successfully processed notebook at {notebook_location} and saved to {output_location}")
 
 
 def main():
@@ -109,12 +112,8 @@ def main():
     )
     args = parser.parse_args()
     if args.notebook_folder is not None:
-        for file in os.listdir(args.notebook_folder):
-            if file.endswith(".ipynb"):
-                process_notebook(
-                    os.path.join(args.notebook_folder, file),
-                    args.config_file,
-                    args.output_folder,
-                )
+        for path in Path(args.notebook_folder).glob("**/*"):
+            if path.is_file() and path.suffix == ".ipynb":
+                process_notebook(path, args.config_file, args.output_folder)
     else:
         process_notebook(args.notebook_file, args.config_file, args.output_folder)

@@ -15,5 +15,9 @@
 import importlib.util
 
 
+def is_black_available():
+    return importlib.util.find_spec("black") is not None
+
+
 def is_hf_doc_builder_available():
     return importlib.util.find_spec("doc_builder") is not None

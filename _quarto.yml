@@ -1,6 +1,8 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: _docs
+  render:
+    - docs/*
 
 format:
   html:

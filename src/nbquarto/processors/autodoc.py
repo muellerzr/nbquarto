@@ -14,7 +14,7 @@
 # limitations under the License.
 import importlib
 
-from ..imports import is_hf_doc_builder_available
+from ..imports import is_black_available, is_hf_doc_builder_available
 from ..processor import Processor
 
 
@@ -277,9 +277,17 @@ class AutoDocProcessor(Processor):
     directives = ["autodoc", "methods"]
 
     def __init__(self, notebook, processor_args: dict = {}):
+        missing_imports = []
         if not is_hf_doc_builder_available():
+            missing_imports.append(["hf-doc-builder", "hf-doc-builder"])
+        if not is_black_available():
+            missing_imports.append(["black", "black~=23.1"])
+        if len(missing_imports) > 0:
+            missing_imports = "\n".join(
+                [f"- {missing_import[0]} ({missing_import[1]})" for missing_import in missing_imports]
+            )
             raise ImportError(
-                "Using the `AutoDocProcessor` requires installing `hf-doc-builder`, please install with `pip install hf-doc-builder`"
+                f"The following packages are required to use the `AutoDocProcessor`:\n    {missing_imports}\nPlease install them and try again."
             )
         super().__init__(notebook)
         self.repo_owner = None
