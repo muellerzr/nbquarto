@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "tests/test_artifacts/test_example.html",
+    "href": "tests/test_artifacts/test_example.html",
+    "title": "Test Notebook",
+    "section": "",
+    "text": "::: {.cell 0=‘p’ 1=‘r’ 2=‘o’ 3=‘c’ 4=‘e’ 5=‘s’ 6=‘s’ vscode=‘{“languageId”:“plaintext”}’}\nprint(\"A test!\")\n:::"
+  },
+  {
+    "objectID": "notebooks/package_reference/processor.html",
+    "href": "notebooks/package_reference/processor.html",
+    "title": "The Processor",
+    "section": "",
+    "text": "The base class for all notebook processors"
+  },
+  {
+    "objectID": "notebooks/package_reference/notebook.html",
+    "href": "notebooks/package_reference/notebook.html",
+    "title": "Notebook Utilities",
+    "section": "",
+    "text": "Functions to help with processing of notebooks. Most come from nbdev"
+  }
+]
