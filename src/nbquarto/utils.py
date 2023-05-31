@@ -12,34 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import importlib.util
-import sys
 from collections import defaultdict
 
 from .foundation import AttributeDictionary
-
-
-# The package importlib_metadata is in a different place, depending on the Python version
-if sys.version_info < (3, 8):
-    import importlib_metadata
-else:
-    import importlib.metadata as importlib_metadata
-
-
-def is_package_available(pkg_name: str) -> bool:
-    """
-    Checks if a package is available
-
-    Args:
-        pkg_name (`str`):
-            The name of the package to check
-    """
-    package_exists = importlib.util.find_spec(pkg_name) is not None
-    if package_exists:
-        try:
-            _ = importlib_metadata.version(pkg_name)
-        except importlib_metadata.PackageNotFoundError:
-            return False
 
 
 def dict2obj(d: dict, dict_function: callable = AttributeDictionary) -> AttributeDictionary:

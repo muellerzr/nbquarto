@@ -67,7 +67,7 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
 
     # Process and save the new notebook
     logger.info(f"Processing notebook with processors: {processors}")
-    notebook_processor = NotebookProcessor(notebook=notebook, processors=processors)
+    notebook_processor = NotebookProcessor(notebook=notebook, processors=processors, config=config)
     notebook_processor.process_notebook()
     if output_folder is None:
         if "output_folder" not in config:

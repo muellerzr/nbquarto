@@ -132,7 +132,7 @@ def extract_directives(cell: AttributeDictionary, remove_directives: bool = True
     return dict(get_directive(directive, language=language) for directive in directives)
 
 
-def make_processors(processors: list, notebook: AttributeDictionary):
+def make_processors(processors: list, notebook: AttributeDictionary, args: dict = {}):
     """
     Creates a list of processors for a notebook
 
@@ -141,10 +141,17 @@ def make_processors(processors: list, notebook: AttributeDictionary):
             A list of functions to apply to the notebook
         notebook (`AttributeDictionary`):
             An object representing all the cells in a Jupyter Notebook
+        args (`list` of `dict`, *optional*, defaults to None):
+            A list of arguments to pass to a particular processor. Should
+            be the same length as `processors` and in the same order.
     """
     for i, processor in enumerate(processors):
         if isinstance(processor, type):
-            processors[i] = processor(notebook=notebook)
+            if processor.__name__ in args:
+                function_args = args[processor.__name__]
+                processors[i] = processor(notebook=notebook, config=function_args)
+            else:
+                processors[i] = processor(notebook=notebook)
     return processors
 
 

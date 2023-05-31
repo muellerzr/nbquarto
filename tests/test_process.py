@@ -2,7 +2,7 @@ import unittest
 
 from nbquarto.notebook import make_cell, new_notebook
 from nbquarto.processor import NotebookProcessor, Processor
-from nbquarto.processors.codenotes import CodeNoteProcessor
+from nbquarto.processors import AutoDocProcessor, CodeNoteProcessor
 
 
 class BasicProcessor(Processor):
@@ -13,6 +13,7 @@ class BasicProcessor(Processor):
     directives = "process"
 
     def process(self, cell):
+        print(f"Cell directives: {cell.directives_}")
         if any(directive in cell.directives_ for directive in self.directives):
             cell.source = f"# This code has been processed!\n{cell.source}"
 
@@ -85,4 +86,32 @@ class TestCodeNotes(unittest.TestCase):
                 "\n```\n:::{style='padding-top: 0px;'}"
                 "\nThis function adds two numbers together\n:::"
             ),
+        )
+
+
+class TestAutoDoc(unittest.TestCase):
+    processor = AutoDocProcessor
+
+    def reset_cells(self):
+        test_cells = [
+            make_cell("# Test Notebook", "markdown"),
+            make_cell("#| autodoc nbquarto.processors.AutoDocProcessor\n#| methods process", "markdown"),
+            make_cell("#| autodoc nbquarto.processor.Processor", "markdown"),
+            make_cell("", "markdown"),
+        ]
+        self.test_notebook = new_notebook(cells=test_cells)
+
+    def setUp(self):
+        self.reset_cells()
+        self.notebook_processor = NotebookProcessor(
+            processors=[self.processor],
+            notebook=self.test_notebook,
+            processor_args=[{"config": {"autodoc": {"repo_name": "nbquarto", "repo_owner": "muellerzr"}}}],
+        )
+
+    def test_codenotes(self):
+        self.notebook_processor.process_notebook()
+        self.assertTrue("Should contain the exact import location" in self.notebook_processor.notebook.cells[1].source)
+        self.assertTrue(
+            "Applies the processor to a cell if the cell is of the" in self.notebook_processor.notebook.cells[2].source
         )

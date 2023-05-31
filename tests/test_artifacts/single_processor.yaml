@@ -1,5 +1,9 @@
 output_folder: processed_notebooks
 processors: [
-  nbquarto.processors.example:BasicProcessor
+    nbquarto.processors.autodoc:AutoDocProcessor
 ]
-  
+
+processor_args:
+  AutoDocProcessor: 
+      repo_owner: muellerzr
+      repo_name: nbquarto

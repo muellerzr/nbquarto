@@ -12,27 +12,33 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import importlib
 
-from doc_builder.autodoc import (
-    _re_example_tags,
-    _re_parameter_group,
-    _re_parameters,
-    _re_raisederrors,
-    _re_raises,
-    _re_returns,
-    _re_returntype,
-    _re_yields,
-    _re_yieldtype,
-    convert_md_docstring_to_mdx,
-    find_documented_methods,
-    find_object_in_package,
-    format_signature,
-    get_shortest_path,
-    get_source_link,
-    is_dataclass_autodoc,
-    is_getset_descriptor,
-    quality_check_docstring,
-)
+from ..imports import is_hf_doc_builder_available
+from ..processor import Processor
+
+
+if is_hf_doc_builder_available():
+    from doc_builder.autodoc import (
+        _re_example_tags,
+        _re_parameter_group,
+        _re_parameters,
+        _re_raisederrors,
+        _re_raises,
+        _re_returns,
+        _re_returntype,
+        _re_yields,
+        _re_yieldtype,
+        convert_md_docstring_to_mdx,
+        find_documented_methods,
+        find_object_in_package,
+        format_signature,
+        get_shortest_path,
+        get_source_link,
+        is_dataclass_autodoc,
+        is_getset_descriptor,
+        quality_check_docstring,
+    )
 
 
 def get_signature_component(name, anchor, signature, object_doc, source_link=None, is_getset_desc=False):
@@ -100,7 +106,7 @@ def get_signature_component(name, anchor, signature, object_doc, source_link=Non
     docstring += ")\n</p>\n\n"
     docstring += '<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">'
     if parameters is not None:
-        docstring += "**Parameters:**\n"
+        docstring += "**Parameters:**\n\n"
 
     if parameters is not None:
         parameters_str = ""
@@ -171,7 +177,7 @@ def document_object(object_name, package, page_info, full_name=True, anchor_name
     return component
 
 
-def autodoc(object_name, package, methods=None, return_anchors=False, page_info=None, version_tag_suffix="src/"):
+def autodoc(object_name, package, methods=None, page_info=None, version_tag_suffix="src/"):
     """
     Generates the documentation of an object, with a potential filtering on the methods for a class.
 
@@ -194,6 +200,7 @@ def autodoc(object_name, package, methods=None, return_anchors=False, page_info=
         page_info = {}
     if "package_name" not in page_info:
         page_info["package_name"] = package.__name__
+    page_info["repo_owner"] = "muellerzr"
 
     obj = find_object_in_package(object_name=object_name, package=package)
     documentation = document_object(
@@ -229,32 +236,80 @@ def autodoc(object_name, package, methods=None, return_anchors=False, page_info=
 
     return documentation
 
-"""
-How should the process API look?
 
-Native autodoc:
+class AutoDocProcessor(Processor):
+    """
+    A processor which will automatically generate API documentation for a given class or method.
+    Largely relies on the implementation in [hf-doc-builder](https://github.comn/huggingface/doc-builder),
+    while adding some customizations for Quarto.
 
-Base:
-[[autodoc]] somemodule.SomeObject
+    This processor expects the following directives:
 
-#| autodoc somemodule.SomeObject
+    - `autodoc`, (`str`):
+        Should contain the exact import location (or relative) of an object or function to document,
+        such as `nbquarto.processors.AutoDocProcessor`.
+    - `methods`, (`List[str]`, *optional*):
+        A list of methods to expose for the specified class. If nothing is passed, all public methods
+        will be documented. If special methods should be documented including all special methods, such
+        as `__call__`, the key `all` can be passed along with the special methods to document.
 
-Specificity:
-[[autodoc]] somemodule.SomeObject
-    - method_1
-    - method_2
-    - method_3
+    Examples:
 
-Options:
+    To expose all public methods:
+    ```markdown
+    #| autodoc: nbquarto.processors.AutoDocProcessor
+    ```
 
-#| autodoc: somemodule.SomeObject
-#| methods: [method_1, method_2, method_3]
+    To specify specific functions to document along with the init:
+    ```markdown
+    #| autodoc nbquarto.processors.AutoDocProcessor
+    #| methods process
+    ```
 
-Including magic methods like `__call__` or private methods, and all public methods:
-[[autodoc]] somemodule.SomeObject
-    - all
-    - __call__
+    To expose all public methods and include special or hidden methods:
+    ```markdown
+    #| autodoc nbquarto.processors.AutoDocProcessor
+    #| methods all, __call__
+    ```
+    """
 
-#| autodoc: somemodule.SomeObject
-#| methods: [all, __call__]
-"""
+    cell_types = "markdown"
+    directives = ["autodoc", "methods"]
+
+    def __init__(self, notebook, processor_args: dict = {}):
+        if not is_hf_doc_builder_available():
+            raise ImportError(
+                "Using the `AutoDocProcessor` requires installing `hf-doc-builder`, please install with `pip install hf-doc-builder`"
+            )
+        super().__init__(notebook)
+        self.repo_owner = None
+        self.repo_name = None
+        # Modules are a reusable dict of module_name: module
+        if processor_args is not None:
+            self.repo_owner = processor_args.get("repo_owner", None)
+            self.repo_name = processor_args.get("repo_name", None)
+        self.modules = {}
+        self.package_name = None
+
+    def process(self, cell):
+        if self.has_directives(cell):
+            item_to_document = cell.directives_["autodoc"][0]
+            object_name = item_to_document.split(".")[-1]
+            if self.package_name is None:
+                self.package_name = item_to_document.split(".")[0]
+            # Methods will be parsed in as a list of strings we can pass to autodoc
+            methods = cell.directives_.get("methods", None)
+            import_location = ".".join(item_to_document.split(".")[:-1])
+            # Autodoc requires the module to be imported
+            if import_location not in self.modules:
+                module = importlib.import_module(import_location)
+                self.modules[import_location] = module
+            else:
+                module = self.modules[import_location]
+            page_info = {"package_name": self.package_name, "no_prefix": True}
+            if self.repo_owner is not None:
+                page_info["repo_owner"] = self.repo_owner
+            if self.repo_name is not None:
+                page_info["repo_name"] = self.repo_name
+            cell.source = autodoc(object_name, module, methods=methods, page_info=page_info)
+        return cell

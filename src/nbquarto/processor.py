@@ -41,7 +41,7 @@ class Processor:
         directive = "process"
 
         def process(self, cell):
-            cell.source = f"# This code has been processed!\n{cell.source}"
+            cell.source = f"# This code has been processed!\\n{cell.source}"
     ```
     """
 
@@ -113,6 +113,7 @@ class NotebookProcessor:
         path: str = None,
         processors: list = [],
         notebook: AttributeDictionary = None,
+        config: dict = {},
         debug: bool = False,
         remove_directives: bool = True,
         process_immediately: bool = False,
@@ -128,6 +129,9 @@ class NotebookProcessor:
             notebook (`AttributeDictionary`, *optional*, defaults to None):
                 An object representing all the cells in a Jupyter Notebook.
                 If None, will be loaded from path
+            processor_args (`dict`, *optional*, defaults to {}):
+                A dictionary of arguments to pass to a given processor.
+                Should be structured such as: {"processor_name: {"argument_name": argument_value}}
             debug (`bool`, *optional*, defaults to False):
                 Whether to print debug statements
             remove_directives (`bool`, *optional*, defaults to True):
@@ -139,7 +143,8 @@ class NotebookProcessor:
         self.language = notebook_language(self.notebook)
         for cell in self.notebook.cells:
             cell.directives_ = extract_directives(cell, remove_directives=remove_directives, language=self.language)
-        self.processors = make_processors(processors, notebook=self.notebook)
+        processor_args = config.get("processor_args", {})
+        self.processors = make_processors(processors, notebook=self.notebook, processor_args=processor_args)
         self.debug = debug
         self.remove_directives = remove_directives
         if process_immediately:
