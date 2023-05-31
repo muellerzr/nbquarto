@@ -139,6 +139,7 @@ class NotebookProcessor:
             process_immediately (`bool`, *optional*, defaults to False):
                 Whether to process the notebook after initialization
         """
+        self.notebook_path = path
         self.notebook = read_notebook(path) if notebook is None else notebook
         self.language = notebook_language(self.notebook)
         for cell in self.notebook.cells:
@@ -179,7 +180,7 @@ class NotebookProcessor:
                 try:
                     self.process_cell(processor, cell)
                 except Exception as e:
-                    msg = f"Error processing cell {cell.index_} with processor `{processor.__module__}.{processor.__class__.__name__}`:"
+                    msg = f"Error processing notebook ({self.notebook_path}) cell {cell.index_} with processor `{processor.__module__}.{processor.__class__.__name__}`:"
                     msg = f"{msg} {e.args[0]}" if e.args else msg
                     e.args = (msg,) + e.args[1:]
                     raise

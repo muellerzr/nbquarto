@@ -1,0 +1,9 @@
+output_folder: docs
+processors: [
+    nbquarto.processors.autodoc:AutoDocProcessor
+]
+
+processor_args:
+  AutoDocProcessor: 
+      repo_owner: muellerzr
+      repo_name: nbquarto

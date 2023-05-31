@@ -54,7 +54,6 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
         config_file (`str`):
             The path to the configuration file that should be used.
     """
-    notebook = read_notebook(notebook_location)
     config = get_configuration(config_file)
 
     # Bring in the processors
@@ -67,7 +66,7 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
 
     # Process and save the new notebook
     logger.info(f"Processing notebook with processors: {processors}")
-    notebook_processor = NotebookProcessor(notebook=notebook, processors=processors, config=config)
+    notebook_processor = NotebookProcessor(notebook_location, processors=processors, config=config)
     notebook_processor.process_notebook()
     if output_folder is None:
         if "output_folder" not in config:
