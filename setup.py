@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 extras = {}
 extras["quality"] = ["black ~= 23.1", "ruff >= 0.0.241"]
-extras["testing"] = ["pytest"]
+extras["testing"] = ["pytest"] + extras["quality"]
 
 setup(
     name='nbquarto',
