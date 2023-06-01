@@ -1,7 +1,7 @@
 import argparse
 import logging
-from pathlib import Path, PurePosixPath
 import subprocess
+from pathlib import Path, PurePosixPath
 
 import yaml
 
