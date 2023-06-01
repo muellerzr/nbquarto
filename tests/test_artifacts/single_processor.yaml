@@ -1,6 +1,8 @@
+
 documentation_source: tests
 processors: [
-    nbquarto.processors.example:BasicProcessor
+    nbquarto.processors.example:BasicProcessor,
+    nbquarto.processors.autodoc:AutoDocProcessor
 ]
 
 processor_args:
