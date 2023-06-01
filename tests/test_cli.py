@@ -18,5 +18,5 @@ class TestCLI(unittest.TestCase):
                 tmpdir,
             ]
             subprocess.run(["nbquarto-process"] + args)
-            with open(f"{tmpdir}/test_example.ipynb") as f:
+            with open(f"{tmpdir}/test_artifacts/test_example.qmd") as f:
                 self.assertIn("# This code has been processed!", f.read())

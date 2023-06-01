@@ -1,6 +1,6 @@
-output_folder: processed_notebooks
+documentation_source: tests
 processors: [
-    nbquarto.processors.autodoc:AutoDocProcessor
+    nbquarto.processors.example:BasicProcessor
 ]
 
 processor_args:
