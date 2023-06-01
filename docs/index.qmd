@@ -6,6 +6,20 @@ title: "nbquarto"
 
 `nbquarto` is a python interface to quickly interact with, modify, and overall process the cells in a Jupyter Notebook, generally to be utilized in [Quarto](https://quarto.org) projects. (However that is *not* a requirement at all!)
 
+But why would you want to modify a Jupyter Notebook *outside Jupyter*? Well there are a few reasons:
+
+- To quickly inject boilerplate in a cell's contents before doing further processing
+- To apply some formatting based upon a directive in the cell before generating the documentation
+- To create a new processor that wraps around something complex before generating documentation, such as automatically generating API documentation quickly.
+
+You'll find a trend here:
+
+Generally `nbquarto` is built on the idea of an extensible *documentation processing framework* that can be utilized to quickly create and apply post-processors 
+to Jupyter Notebooks when generating documentation saving you time, effort, or potentially providing access to utilities that don't exist outside-the-box in Quarto.
+
+As a result, while it's designed mostly around Quarto, it simply uses their directives for most of it. As a result this framework can be used in *any* documentation framework
+by the end of it, if the documentation were originating from Jupyter Notebooks.
+
 ## Why `nbquarto`?
 
 `nbquarto` takes all of its inspiration from the [nbdev](https://github.com/fastai/nbdev) project by fast.ai, and reimplements the core part of it, the `Processor`, in a way that entices code readability, better error management, and an easier user experience overall. 
