@@ -4,7 +4,12 @@ project:
 
 website:
   sidebar:
-    contents: auto
+    style: "docked"
+    search: true
+    contents:
+      - index.qmd
+      - section: "Package Reference"
+        contents: package_reference/*
 
 format:
   html:
