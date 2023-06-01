@@ -183,12 +183,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#nbquarto" id="toc-nbquarto" class="nav-link active" data-scroll-target="#nbquarto">nbquarto</a>
+  <li><a href="#what-is-nbquarto" id="toc-what-is-nbquarto" class="nav-link active" data-scroll-target="#what-is-nbquarto">What is <code>nbquarto</code>?</a>
   <ul>
+  <li><a href="#why-nbquarto" id="toc-why-nbquarto" class="nav-link" data-scroll-target="#why-nbquarto">Why <code>nbquarto</code>?</a></li>
+  <li><a href="#whats-the-difference-between-this-project-and-quarto-extensions" id="toc-whats-the-difference-between-this-project-and-quarto-extensions" class="nav-link" data-scroll-target="#whats-the-difference-between-this-project-and-quarto-extensions">What’s the difference between this project and Quarto Extensions?</a></li>
   <li><a href="#important-terms" id="toc-important-terms" class="nav-link" data-scroll-target="#important-terms">Important terms:</a></li>
-  <li><a href="#creating-a-processor" id="toc-creating-a-processor" class="nav-link" data-scroll-target="#creating-a-processor">Creating a <code>Processor</code></a></li>
+  <li><a href="#how-does-it-work" id="toc-how-does-it-work" class="nav-link" data-scroll-target="#how-does-it-work">How does it work?</a></li>
   <li><a href="#creating-a-config-file" id="toc-creating-a-config-file" class="nav-link" data-scroll-target="#creating-a-config-file">Creating a config file</a></li>
-  <li><a href="#calling-the-processors-from-the-cli" id="toc-calling-the-processors-from-the-cli" class="nav-link" data-scroll-target="#calling-the-processors-from-the-cli">Calling the <code>Processor</code>(s) from the CLI</a></li>
+  <li><a href="#actually-processing-your-notebooks" id="toc-actually-processing-your-notebooks" class="nav-link" data-scroll-target="#actually-processing-your-notebooks">Actually processing your Notebooks</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -213,21 +215,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="nbquarto" class="level1">
-<h1>nbquarto</h1>
-<p><code>nbquarto</code> is a small python library built around the idea of creating quick extensions (<code>Processors</code>) to use in <a href="https://quarto.org">Quarto</a> projects.</p>
-<p>The general idea is that a <code>Processor</code> handles a “cell” in a notebook (or <code>qmd</code> eventually) and modifies its contents for documentation purposes (but can be used for other things). This project is built on the idea (and most of the code) from the <a href="https://github.com/fastai/nbdev">nbdev</a> project by fast.ai, however it explicitly removes any magicalness from the code and creates a library that is purely “pythonic”. In doing so, it’s also more flexible and easier for users to use.</p>
+<section id="what-is-nbquarto" class="level1">
+<h1>What is <code>nbquarto</code>?</h1>
+<p><code>nbquarto</code> is a python interface to quickly interact with, modify, and overall process the cells in a Jupyter Notebook, generally to be utilized in <a href="https://quarto.org">Quarto</a> projects. (However that is <em>not</em> a requirement at all!)</p>
+<section id="why-nbquarto" class="level2">
+<h2 class="anchored" data-anchor-id="why-nbquarto">Why <code>nbquarto</code>?</h2>
+<p><code>nbquarto</code> takes all of its inspiration from the <a href="https://github.com/fastai/nbdev">nbdev</a> project by fast.ai, and reimplements the core part of it, the <code>Processor</code>, in a way that entices code readability, better error management, and an easier user experience overall.</p>
+<p>I’ve tried to write projects like <code>nbquarto</code> multiple times, most recently through the <a href="https://github.com/muellerzr/nbdev-extensions">nbdev-extensions</a>, however for my general use-case of someone who just wanted to modify the notebooks with specific markup for whatever processor I wanted to include (such as an automatic API-documentation generator), having the entire framework <code>nbdev</code> advertised was just far too much for what I wanted to do, along with the dangers of using a library that is exceedingly cryptic and with hard-to-read source code due to so much abstraction.</p>
+<p><code>nbquarto</code> removes <em>almost all</em> of the abstraction, and its dependencies are exceedingly minimal, allowing for anyone who wants to pick up this project to easily understand just what is happening under the hood and do what they want.</p>
+</section>
+<section id="whats-the-difference-between-this-project-and-quarto-extensions" class="level2">
+<h2 class="anchored" data-anchor-id="whats-the-difference-between-this-project-and-quarto-extensions">What’s the difference between this project and <a href="https://quarto.org/docs/extensions/">Quarto Extensions?</a></h2>
+<p>True, quarto extensions are <em>already</em> a thing, but I didn’t enjoy the fact I had to go learn an entirely new language (Lua) to modify content that was already (in this case) in Python. As a result, <code>nbquarto</code> acts as a pythonic-version of Lua in its processing capabilities. While we sacrifice some processing speed (because it <em>is</em> still python), the benefit of a flexible and easy-to-follow paradigm for creating these extensions far outweights the extra minimal seconds added to process each notebook.</p>
+</section>
 <section id="important-terms" class="level2">
 <h2 class="anchored" data-anchor-id="important-terms">Important terms:</h2>
 <ul>
 <li><code>cell</code>: A singular module or item in a Jupyter Notebook, of which can either execute code written in it or contain Markdown that will be presented to a reader or on a Quarto website</li>
 <li><code>directive</code>: A comment block in a notebook cell that Quarto (and <code>nbquarto</code>) can process or recognize. Generally denoted with a pipe (<code>|</code>) after the comment, such as <code>#| directive</code> or <code># | directive</code></li>
-<li><code>Processor</code>: A class which modifies a cell in a Jupyter Notebook</li>
+<li><code>Processor</code>: A class which modifies a cell in a Jupyter Notebook depending on the directive(s) present in it.</li>
 </ul>
 </section>
-<section id="creating-a-processor" class="level2">
-<h2 class="anchored" data-anchor-id="creating-a-processor">Creating a <code>Processor</code></h2>
-<p>As mentioned earlier, a <code>Processor</code> take the content in any Jupyter Notebook cell and modify it in some way. The original design intention was to inject Quarto-specific nuonces into the cell to help with code formatting, or to write quick shortcuts to create complex combinations in quarto syntax on the fly.</p>
+<section id="how-does-it-work" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-it-work">How does it work?</h2>
+<p>The general idea of <code>nbquarto</code> revolves around a <code>Processor</code>. The original design intention was to inject Quarto-specific nuonces into the cell to help with code formatting, or to write quick shortcuts to create complex combinations in quarto syntax on the fly.</p>
 <p>The following is a small snippet (taken from the <a href="src/nbquarto/processors/example.py">official example processor</a>) which simply injects the code:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This code has been processed!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>to the top of any cell.</p>
@@ -244,26 +255,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">any</span>(directive <span class="kw">in</span> cell.directives_ <span class="cf">for</span> directive <span class="kw">in</span> <span class="va">self</span>.directives):</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            cell.source <span class="op">=</span> <span class="ss">f"# This code has been processed!</span><span class="ch">\n</span><span class="sc">{</span>cell<span class="sc">.</span>source<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The <code>process</code> function is what will get applied to the notebook cell, after checking if any directives to look for exist in the cell.</p>
+<p><code>cell</code> objects contain two important aspects of information we can look at: - <code>directives_</code>: <code>list[str]</code>, a list of directives in the cell, such as <code>process</code> if it were written as <code>#| process</code> - <code>source</code>: The text that exists inside the cell that you might want to modify</p>
+<p>By utilizing these two simplistic properties, one can create amazing extensions such as ones to <a href="./package_reference/processors.html#autodocprocessor">automatically generate API documentation</a> or <a href="./package_reference/processors.html#codenoteprocessor">create helpful side-by-side code explanations</a></p>
 </section>
 <section id="creating-a-config-file" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-config-file">Creating a config file</h2>
-<p>After either creating your own processor, or deciding what processor to use, a config file should be generated that contains the exact imports for processors you want to use, and where processed notebooks should be sent to.</p>
-<p>See below for an example, located <a href="tests/test_artifacts/single_processor.yaml">here</a> in the repo:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">output_folder</span><span class="kw">:</span><span class="at"> processed_notebooks</span></span>
+<p><code>nbquarto</code> utilizes a configuration file to handle all of the nuonces related to the processors to use, where the notebooks should be sent to, and can even handle setting any constants for <code>Processors</code> that they may want.</p>
+<p>For example, located <a href="tests/test_artifacts/single_processor.yaml">here</a> in the repo:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">documentation_source</span><span class="kw">:</span><span class="at"> tests</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">processors</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  nbquarto.processors.example:BasicProcessor</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">    nbquarto.processors.example:BasicProcessor</span><span class="kw">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    nbquarto.processors.autodoc:AutoDocProcessor</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">processor_args</span><span class="kw">:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">AutoDocProcessor</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">repo_owner</span><span class="kw">:</span><span class="at"> muellerzr</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">repo_name</span><span class="kw">:</span><span class="at"> nbquarto</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This reads as follows:</p>
 <ul>
 <li><p><code>output_folder</code>: All notebooks will be saved to a (potentially new) <code>processed_notebooks</code> directory</p></li>
-<li><p><code>processors</code>: This contains the list of processors we want to apply</p></li>
-<li><p><code>nbquarto.processors.example:BasicProcessor</code>: This is the exact import for the processor to apply</p></li>
+<li><p><code>processors</code>: This contains the list of processors we want to apply</p>
+<ul>
+<li><code>nbquarto.processors.example:BasicProcessor</code> and <code>nbquarto.processors.autodoc:AutoDocProcessor</code>: This is the exact import for the processor to apply. Can also be relative if the package is setup for it (so it could be <code>nbquarto.processors:AutoDocProcessor</code>)</li>
+</ul></li>
+<li><p><code>processor_args</code>: This contains a list of <code>processor</code>: <code>args</code> that should be passed all the time to a particular processor, if it takes in special configuration arguments</p>
+<ul>
+<li><code>AutoDocProcessor</code>: This is the name of the processor that will take in arguments following it
+<ul>
+<li><code>repo_name</code> and <code>repo_owner</code>: These are arguments the <code>AutoDocProcessor</code> accepets upon its <code>__init__</code>.</li>
+</ul></li>
+</ul></li>
 </ul>
 </section>
-<section id="calling-the-processors-from-the-cli" class="level2">
-<h2 class="anchored" data-anchor-id="calling-the-processors-from-the-cli">Calling the <code>Processor</code>(s) from the CLI</h2>
-<p>Finally, by calling the <code>nbquarto-process</code> command you can process notebooks with your configured <code>Processor</code>(s):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nbquarto-process</span> <span class="at">--config_file</span> tests/test_artifacts/single_processor.yaml <span class="at">--notebook_file</span> tests/test_artifacts/test_example.ipynb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="actually-processing-your-notebooks" class="level2">
+<h2 class="anchored" data-anchor-id="actually-processing-your-notebooks">Actually processing your Notebooks</h2>
+<p>By calling the <code>nbquarto-process</code> command you can process notebooks with your configured <code>Processor</code>(s):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nbquarto-process</span> <span class="at">--config_file</span> tests/test_artifacts/single_processor.yaml <span class="at">--notebook_file</span> tests/test_artifacts/test_example.ipynb <span class="at">--output_folder</span> docs/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Afterwards, all of the processed notebooks are saved as <code>qmd</code> files in <code>output_folder</code> and can be modified directly, if you so choose. As you can specify already existing folders, you can have <code>docs</code> contain all of your regular documentation, and then expect that <code>nbquarto</code> will create the <code>qmd</code> files in the same directory structure it was in before except now in <code>docs</code>.</p>
 
 
 </section>
