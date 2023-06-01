@@ -1,0 +1,94 @@
+---
+jupyter: python3
+---
+
+# Processors
+> The various `Processor` classes available to use
+
+### `BasicProcessor` {#nbquarto.processors.example.BasicProcessor}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/example.py#L17){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`notebook`**: AttributeDictionary)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+A basic processor that adds a comment to the top of a cell
+
+</div>
+
+### `AutoDocProcessor` {#nbquarto.processors.autodoc.AutoDocProcessor}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/autodoc.py#L240){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`notebook`**, **`processor_args`**: dict = {})
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+A processor which will automatically generate API documentation for a given class or method.
+Largely relies on the implementation in [hf-doc-builder](https://github.comn/huggingface/doc-builder),
+while adding some customizations for Quarto.
+
+This processor expects the following directives:
+
+- `autodoc`, (`str`):
+  Should contain the exact import location (or relative) of an object or function to document,
+  such as `nbquarto.processors.AutoDocProcessor`.
+- `methods`, (`List[str]`, *optional*):
+  A list of methods to expose for the specified class. If nothing is passed, all public methods
+  will be documented. If special methods should be documented including all special methods, such
+  as `__call__`, the key `all` can be passed along with the special methods to document.
+
+Examples:
+
+To expose all public methods:
+```markdown
+#| autodoc: nbquarto.processors.AutoDocProcessor
+```
+
+To specify specific functions to document along with the init:
+```markdown
+#| autodoc nbquarto.processors.AutoDocProcessor
+#| methods process
+```
+
+To expose all public methods and include special or hidden methods:
+```markdown
+#| autodoc nbquarto.processors.AutoDocProcessor
+#| methods all, __call__
+```
+
+</div>
+
+### `CodeNoteProcessor` {#nbquarto.processors.codenotes.CodeNoteProcessor}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/codenotes.py#L124){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`notebook`**: AttributeDictionary)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+A processor which checks and reorganizes cells for documentation with the proper
+explanations
+
+Specifically will look at source code cells that have markdown cells following them.
+Each markdown cell should contain `#| explain` followed by a selection of the source
+code the markdown cell is explaining. The processor will then create a panel tabset
+with the original code and the new explanation.
+
+For example:
+
+In a code cell:
+```python
+def addition(a,b):
+    return a+b
+```
+
+In a subsequent markdown cell:
+```markdown
+#| explain `addition(a,b)`
+This function adds two numbers together
+```
+
+</div>
+
