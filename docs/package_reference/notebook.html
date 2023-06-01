@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>notebook</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#notebook-utilities" id="toc-notebook-utilities" class="nav-link active" data-scroll-target="#notebook-utilities">Notebook Utilities</a>
+  <ul>
+  <li><a href="#nbquarto.notebook.NotebookCell" id="toc-nbquarto.notebook.NotebookCell" class="nav-link" data-scroll-target="#nbquarto.notebook.NotebookCell"><code>NotebookCell</code></a>
+  <ul class="collapse">
+  <li><a href="#nbquarto.notebook.NotebookCell.set_source" id="toc-nbquarto.notebook.NotebookCell.set_source" class="nav-link" data-scroll-target="#nbquarto.notebook.NotebookCell.set_source"><code>set_source</code></a></li>
+  </ul></li>
+  <li><a href="#nbquarto.notebook.dict2notebook" id="toc-nbquarto.notebook.dict2notebook" class="nav-link" data-scroll-target="#nbquarto.notebook.dict2notebook"><code>nbquarto.notebook.dict2notebook</code></a></li>
+  <li><a href="#nbquarto.notebook.read_notebook" id="toc-nbquarto.notebook.read_notebook" class="nav-link" data-scroll-target="#nbquarto.notebook.read_notebook"><code>nbquarto.notebook.read_notebook</code></a></li>
+  <li><a href="#nbquarto.notebook.write_notebook" id="toc-nbquarto.notebook.write_notebook" class="nav-link" data-scroll-target="#nbquarto.notebook.write_notebook"><code>nbquarto.notebook.write_notebook</code></a></li>
+  <li><a href="#nbquarto.notebook.new_notebook" id="toc-nbquarto.notebook.new_notebook" class="nav-link" data-scroll-target="#nbquarto.notebook.new_notebook"><code>nbquarto.notebook.new_notebook</code></a></li>
+  <li><a href="#nbquarto.notebook.make_cell" id="toc-nbquarto.notebook.make_cell" class="nav-link" data-scroll-target="#nbquarto.notebook.make_cell"><code>nbquarto.notebook.make_cell</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="notebook-utilities" class="level1">
+<h1>Notebook Utilities</h1>
+<blockquote class="blockquote">
+<p>Functions to help with processing of notebooks. Most come from <code>nbdev</code></p>
+</blockquote>
+<section id="nbquarto.notebook.NotebookCell" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.notebook.NotebookCell"><code>NotebookCell</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/notebook.py#L22" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<p style="font-size:.875rem;line-height:1.25rem;">
+(<strong><code>index</code></strong>: int, <strong><code>cell</code></strong>: dict)
+</p>
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<p>A cell for a Jupyter Notebook</p>
+</div>
+<section id="nbquarto.notebook.NotebookCell.set_source" class="level4">
+<h4 class="anchored" data-anchor-id="nbquarto.notebook.NotebookCell.set_source"><code>set_source</code></h4>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/notebook.py#L40" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<p style="font-size:.875rem;line-height:1.25rem;">
+(<strong><code>source</code></strong>: list)
+</p>
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong>source</strong> (<code>list</code>) – The source of the cell as a list of strings</li>
+</ul>
+<p>Sets the source attribute of the cell as a string and removes parsed directives</p>
+</div>
+</section>
+</section>
+<section id="nbquarto.notebook.dict2notebook" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.notebook.dict2notebook"><code>nbquarto.notebook.dict2notebook</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/notebook.py#L59" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<p style="font-size:.875rem;line-height:1.25rem;">
+(<strong><code>d</code></strong>: dict = None, <strong><code>**kwargs</code></strong>)
+</p>
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong>d</strong> (<code>dict</code>, <em>optional</em>, defaults to None) – A dictionary to convert</li>
+</ul>
+<p>Converts dictionary <code>d</code> to an <code>AttributeDictionary</code></p>
+</div>
+</section>
+<section id="nbquarto.notebook.read_notebook" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.notebook.read_notebook"><code>nbquarto.notebook.read_notebook</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/notebook.py#L72" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<p style="font-size:.875rem;line-height:1.25rem;">
+(<strong><code>path</code></strong>: str)
+</p>
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong>path</strong> (<code>str</code>) – The path to the Jupyter Notebook</li>
+</ul>
+<p>Reads a Jupyter Notebook from a filepath</p>
+</div>
+</section>
+<section id="nbquarto.notebook.write_notebook" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.notebook.write_notebook"><code>nbquarto.notebook.write_notebook</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/notebook.py#L86" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<p style="font-size:.875rem;line-height:1.25rem;">
+(<strong><code>notebook</code></strong>: AttributeDictionary, <strong><code>path</code></strong>: str)
+</p>
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong>notebook</strong> (<code>AttributeDictionary</code>) – An object representing all the cells in a Jupyter Notebook</li>
+<li><strong>path</strong> (<code>str</code>) – The path to the Jupyter Notebook</li>
+</ul>
+<p>Writes the contents of <code>notebook</code> to <code>path</code></p>
+</div>
+</section>
+<section id="nbquarto.notebook.new_notebook" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.notebook.new_notebook"><code>nbquarto.notebook.new_notebook</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/notebook.py#L126" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<p style="font-size:.875rem;line-height:1.25rem;">
+(<strong><code>cells</code></strong>: list = [], <strong><code>metadata</code></strong>: dict = {}, <strong><code>nbformat</code></strong>: int = 4, <strong><code>nbformat_minor</code></strong>: int = 5)
+</p>
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong>cells</strong> (<code>list</code> of <code>NotebookCell</code>, <em>optional</em>, defaults to []) – A list of cells to make up the notebook</li>
+<li><strong>metadata</strong> (<code>dict</code>, <em>optional</em>, defaults to &amp;lcub;}) – Metadata for the notebook</li>
+<li><strong>nbformat</strong> (<code>int</code>, <em>optional</em>, defaults to 4) – The nbformat of the notebook</li>
+<li><strong>nbformat_minor</strong> (<code>int</code>, <em>optional</em>, defaults to 5) – The minor nbformat version of the notebook</li>
+</ul>
+<p>Creates a new empty notebook</p>
+</div>
+</section>
+<section id="nbquarto.notebook.make_cell" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.notebook.make_cell"><code>nbquarto.notebook.make_cell</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/notebook.py#L143" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<p style="font-size:.875rem;line-height:1.25rem;">
+(<strong><code>text</code></strong>: str, <strong><code>cell_type</code></strong>: str = ‘code’, <strong><code>**kwargs</code></strong>)
+</p>
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong>text</strong> (<code>str</code>) – The source code for the cell</li>
+<li><strong>cell_type</strong> (<code>str</code>, <em>optional</em>, defaults to “code”) – The type of cell to make, must be one of “code”, “markdown”, or “raw” kwargs – Additional arguments to pass to the cell, such as <code>metadata</code></li>
+</ul>
+<p>Makes a blank notebook cell</p>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
