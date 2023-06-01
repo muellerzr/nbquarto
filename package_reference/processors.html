@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>processor</title>
+<title>processors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -164,12 +164,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../package_reference/processors.html" class="sidebar-item-text sidebar-link">Processors</a>
+  <a href="../package_reference/processors.html" class="sidebar-item-text sidebar-link active">Processors</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../package_reference/processor.html" class="sidebar-item-text sidebar-link active">The <code>Processor</code></a>
+  <a href="../package_reference/processor.html" class="sidebar-item-text sidebar-link">The <code>Processor</code></a>
   </div>
 </li>
       </ul>
@@ -183,19 +183,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-processor" id="toc-the-processor" class="nav-link active" data-scroll-target="#the-processor">The <code>Processor</code></a>
+  <li><a href="#processors" id="toc-processors" class="nav-link active" data-scroll-target="#processors">Processors</a>
   <ul>
-  <li><a href="#nbquarto.processor.Processor" id="toc-nbquarto.processor.Processor" class="nav-link" data-scroll-target="#nbquarto.processor.Processor"><code>Processor</code></a>
-  <ul class="collapse">
-  <li><a href="#nbquarto.processor.Processor.has_directives" id="toc-nbquarto.processor.Processor.has_directives" class="nav-link" data-scroll-target="#nbquarto.processor.Processor.has_directives"><code>has_directives</code></a></li>
-  <li><a href="#nbquarto.processor.Processor.process" id="toc-nbquarto.processor.Processor.process" class="nav-link" data-scroll-target="#nbquarto.processor.Processor.process"><code>process</code></a></li>
-  <li><a href="#nbquarto.processor.Processor.process_cell" id="toc-nbquarto.processor.Processor.process_cell" class="nav-link" data-scroll-target="#nbquarto.processor.Processor.process_cell"><code>process_cell</code></a></li>
-  </ul></li>
-  <li><a href="#nbquarto.processor.NotebookProcessor" id="toc-nbquarto.processor.NotebookProcessor" class="nav-link" data-scroll-target="#nbquarto.processor.NotebookProcessor"><code>NotebookProcessor</code></a>
-  <ul class="collapse">
-  <li><a href="#nbquarto.processor.NotebookProcessor.process_cell" id="toc-nbquarto.processor.NotebookProcessor.process_cell" class="nav-link" data-scroll-target="#nbquarto.processor.NotebookProcessor.process_cell"><code>process_cell</code></a></li>
-  <li><a href="#nbquarto.processor.NotebookProcessor.process_notebook" id="toc-nbquarto.processor.NotebookProcessor.process_notebook" class="nav-link" data-scroll-target="#nbquarto.processor.NotebookProcessor.process_notebook"><code>process_notebook</code></a></li>
-  </ul></li>
+  <li><a href="#nbquarto.processors.example.BasicProcessor" id="toc-nbquarto.processors.example.BasicProcessor" class="nav-link" data-scroll-target="#nbquarto.processors.example.BasicProcessor"><code>BasicProcessor</code></a></li>
+  <li><a href="#nbquarto.processors.autodoc.AutoDocProcessor" id="toc-nbquarto.processors.autodoc.AutoDocProcessor" class="nav-link" data-scroll-target="#nbquarto.processors.autodoc.AutoDocProcessor"><code>AutoDocProcessor</code></a></li>
+  <li><a href="#nbquarto.processors.codenotes.CodeNoteProcessor" id="toc-nbquarto.processors.codenotes.CodeNoteProcessor" class="nav-link" data-scroll-target="#nbquarto.processors.codenotes.CodeNoteProcessor"><code>CodeNoteProcessor</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -205,109 +197,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<section id="the-processor" class="level1">
-<h1>The <code>Processor</code></h1>
+<section id="processors" class="level1">
+<h1>Processors</h1>
 <blockquote class="blockquote">
-<p>The base class for all notebook processors</p>
+<p>The various <code>Processor</code> classes available to use</p>
 </blockquote>
-<section id="nbquarto.processor.Processor" class="level3">
-<h3 class="anchored" data-anchor-id="nbquarto.processor.Processor"><code>Processor</code></h3>
-<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L22" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<section id="nbquarto.processors.example.BasicProcessor" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.processors.example.BasicProcessor"><code>BasicProcessor</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/example.py#L17" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
 (<strong><code>notebook</code></strong>: AttributeDictionary)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-<p>Base class for all notebook processors. Any processors should inherit this class.</p>
-<p>When writing a processor, you can override methods that modify the content of a cell with the <code>process_cell</code> function.</p>
-<p>The class stores the entire notebook in the <code>notebook</code> attribute.</p>
-<p>When using a processor, simply call the class and pass in a single cell.</p>
-<p>Example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BasicProcessor(Processor):</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"A basic processor that adds a comment to the top of a cell"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    directive <span class="op">=</span> <span class="st">"process"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process(<span class="va">self</span>, cell):</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        cell.source <span class="op">=</span> <span class="ss">f"# This code has been processed!</span><span class="ch">\n</span><span class="ss">&amp;amp;lcub;cell.source</span><span class="er">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="nbquarto.processor.Processor.has_directives" class="level4">
-<h4 class="anchored" data-anchor-id="nbquarto.processor.Processor.has_directives"><code>has_directives</code></h4>
-<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L63" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
-<p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>cell</code></strong>: AttributeDictionary)
-</p>
-<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-<p>Checks if <code>cell</code> contains any directives in <code>self.directives</code></p>
+<p>A basic processor that adds a comment to the top of a cell</p>
 </div>
 </section>
-<section id="nbquarto.processor.Processor.process" class="level4">
-<h4 class="anchored" data-anchor-id="nbquarto.processor.Processor.process"><code>process</code></h4>
-<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L69" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<section id="nbquarto.processors.autodoc.AutoDocProcessor" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.processors.autodoc.AutoDocProcessor"><code>AutoDocProcessor</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/autodoc.py#L240" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>cell</code></strong>: AttributeDictionary)
+(<strong><code>notebook</code></strong>, <strong><code>processor_args</code></strong>: dict = {})
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-<p><strong>Parameters:</strong></p>
+<p>A processor which will automatically generate API documentation for a given class or method. Largely relies on the implementation in <a href="https://github.comn/huggingface/doc-builder">hf-doc-builder</a>, while adding some customizations for Quarto.</p>
+<p>This processor expects the following directives:</p>
 <ul>
-<li><strong>cell</strong> (<code>AttributeDictionary</code>) – A cell from a Jupyter Notebook</li>
+<li><code>autodoc</code>, (<code>str</code>): Should contain the exact import location (or relative) of an object or function to document, such as <code>nbquarto.processors.AutoDocProcessor</code>.</li>
+<li><code>methods</code>, (<code>List[str]</code>, <em>optional</em>): A list of methods to expose for the specified class. If nothing is passed, all public methods will be documented. If special methods should be documented including all special methods, such as <code>__call__</code>, the key <code>all</code> can be passed along with the special methods to document.</li>
 </ul>
-<p>A function to apply on a cell. Should use <code>self.has_directives</code> to see if the processor should be applied</p>
-<p>Example:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process(<span class="va">self</span>, cell):</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="va">self</span>.has_directives(<span class="va">self</span>, cell):</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        cell.source <span class="op">=</span> <span class="st">"Found a directive!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Examples:</p>
+<p>To expose all public methods:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>#| autodoc: nbquarto.processors.AutoDocProcessor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To specify specific functions to document along with the init:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>#| autodoc nbquarto.processors.AutoDocProcessor</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>#| methods process</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To expose all public methods and include special or hidden methods:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>#| autodoc nbquarto.processors.AutoDocProcessor</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>#| methods all, __call__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="nbquarto.processor.Processor.process_cell" class="level4">
-<h4 class="anchored" data-anchor-id="nbquarto.processor.Processor.process_cell"><code>process_cell</code></h4>
-<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L87" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
+<section id="nbquarto.processors.codenotes.CodeNoteProcessor" class="level3">
+<h3 class="anchored" data-anchor-id="nbquarto.processors.codenotes.CodeNoteProcessor"><code>CodeNoteProcessor</code></h3>
+<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/codenotes.py#L124" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>cell</code></strong>: AttributeDictionary)
+(<strong><code>notebook</code></strong>: AttributeDictionary)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong>cell</strong> (<code>AttributeDictionary</code>) – A cell from a Jupyter Notebook</li>
-</ul>
-<p>Applies the processor to a cell if the cell is of the correct type and contains the correct directive</p>
-</div>
-</section>
-</section>
-<section id="nbquarto.processor.NotebookProcessor" class="level3">
-<h3 class="anchored" data-anchor-id="nbquarto.processor.NotebookProcessor"><code>NotebookProcessor</code></h3>
-<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L110" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
-<p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>path</code></strong>: str = None, <strong><code>processors</code></strong>: list = [], <strong><code>notebook</code></strong>: AttributeDictionary = None, <strong><code>config</code></strong>: dict = {}, <strong><code>debug</code></strong>: bool = False, <strong><code>remove_directives</code></strong>: bool = True, <strong><code>process_immediately</code></strong>: bool = False)
-</p>
-<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-
-</div>
-<section id="nbquarto.processor.NotebookProcessor.process_cell" class="level4">
-<h4 class="anchored" data-anchor-id="nbquarto.processor.NotebookProcessor.process_cell"><code>process_cell</code></h4>
-<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L154" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
-<p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>processor</code></strong>: callable, <strong><code>cell</code></strong>: AttributeDictionary)
-</p>
-<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong>processor</strong> (<code>callable</code>) – A function to apply to a notebook cell’s content</li>
-<li><strong>cell</strong> (<code>AttributeDictionary</code>) – A cell from a Jupyter Notebook</li>
-</ul>
-<p>Processes a single cell of a notebook. Should not be called explicitly and instead a user should use <code>process_notebook</code></p>
-</div>
-</section>
-<section id="nbquarto.processor.NotebookProcessor.process_notebook" class="level4">
-<h4 class="anchored" data-anchor-id="nbquarto.processor.NotebookProcessor.process_notebook"><code>process_notebook</code></h4>
-<a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L172" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
-<p style="font-size:.875rem;line-height:1.25rem;">
-()
-</p>
-<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-<p>Processes the content of the notebook</p>
+<p>A processor which checks and reorganizes cells for documentation with the proper explanations</p>
+<p>Specifically will look at source code cells that have markdown cells following them. Each markdown cell should contain <code>#| explain</code> followed by a selection of the source code the markdown cell is explaining. The processor will then create a panel tabset with the original code and the new explanation.</p>
+<p>For example:</p>
+<p>In a code cell:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> addition(a,b):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a<span class="op">+</span>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In a subsequent markdown cell:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>#| explain <span class="in">`addition(a,b)`</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>This function adds two numbers together</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
-</section>
 </section>
 </section>
 
