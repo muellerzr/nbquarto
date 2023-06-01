@@ -55,8 +55,11 @@ processors: [
 ]
 ```
 This reads as follows:
+
 - `output_folder`: All notebooks will be saved to a (potentially new) `processed_notebooks` directory
+
 - `processors`: This contains the list of processors we want to apply
+
 - `nbquarto.processors.example:BasicProcessor`: This is the exact import for the processor to apply
 
 ## Calling the `Processor`(s) from the CLI

@@ -1,13 +1,10 @@
 project:
   type: website
-  output-dir: _docs
-  render:
-    - docs/*
-    
-sidebar:
-  contents: auto
+  output-dir: ../_docs
 
-  
+website:
+  sidebar:
+    contents: auto
 
 format:
   html:
