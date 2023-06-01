@@ -3,8 +3,9 @@ project:
   output-dir: _docs
   render:
     - docs/*
-  sidebar:
-    contents: auto
+    
+sidebar:
+  contents: auto
 
   
 
