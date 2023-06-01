@@ -10,3 +10,6 @@ style:
 
 test:
 	pytest -sv ./tests
+
+documentation:
+	nbquarto-process --config_file config.yaml --notebook_folder nbs/
