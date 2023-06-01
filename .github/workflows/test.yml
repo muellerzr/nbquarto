@@ -23,6 +23,11 @@ jobs:
       with:
         python-version: 3.9
 
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+      with:
+        version: 1.2.280
+
     - name: Install the library
       run: |
         pip install --upgrade pip
