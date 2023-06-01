@@ -13,7 +13,6 @@ class BasicProcessor(Processor):
     directives = "process"
 
     def process(self, cell):
-        print(f"Cell directives: {cell.directives_}")
         if any(directive in cell.directives_ for directive in self.directives):
             cell.source = f"# This code has been processed!\n{cell.source}"
 
