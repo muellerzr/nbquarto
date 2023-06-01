@@ -1,6 +1,7 @@
 import argparse
 import logging
 from pathlib import Path, PurePosixPath
+import subprocess
 
 import yaml
 
@@ -83,7 +84,9 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
     output_location = output_folder / notebook_location.relative_to(documentation_source)
     Path(output_location.parent).mkdir(parents=True, exist_ok=True)
     write_notebook(notebook_processor.notebook, output_location)
-    logger.debug(f"Successfully processed notebook at {notebook_location} and saved to {output_location}")
+    logger.info(f"Successfully processed notebook at {notebook_location} and saved to {output_location}")
+    subprocess.run(["quarto", "convert", output_location])
+    Path(output_location).unlink()
 
 
 def main():

@@ -1,4 +1,4 @@
-output_folder: package_reference
+output_folder: docs
 documentation_source: nbs
 processors: [
     nbquarto.processors.autodoc:AutoDocProcessor

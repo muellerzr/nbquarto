@@ -106,7 +106,7 @@ class TestAutoDoc(unittest.TestCase):
         self.notebook_processor = NotebookProcessor(
             processors=[self.processor],
             notebook=self.test_notebook,
-            processor_args=[{"config": {"autodoc": {"repo_name": "nbquarto", "repo_owner": "muellerzr"}}}],
+            config={"autodoc": {"repo_name": "nbquarto", "repo_owner": "muellerzr"}},
         )
 
     def test_codenotes(self):
