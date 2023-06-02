@@ -17,6 +17,14 @@ logger = logging.getLogger(__name__)
 class BasicProcessor(Processor):
     """
     A basic processor that adds a comment to the top of a cell
+
+    Example usage:
+
+    ```python
+    #| process
+    def my_function():
+        return "Hello world!"
+    ```
     """
 
     directives = "process"

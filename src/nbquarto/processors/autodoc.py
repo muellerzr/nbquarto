@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import html
 import importlib
 
 from ..imports import is_black_available, is_hf_doc_builder_available
@@ -91,7 +92,6 @@ def get_signature_component(name, anchor, signature, object_doc, source_link=Non
     object_doc, raise_description = regex_closure(object_doc, _re_raises)
     object_doc, raisederrors = regex_closure(object_doc, _re_raisederrors)
     object_doc = object_doc.replace("[`", "`").replace("`]", "`")
-    name = name.replace("class ", "")
 
     docstring = f"### `{name}` " + f"{{#{anchor}}}"
     docstring += "\n"
@@ -100,7 +100,10 @@ def get_signature_component(name, anchor, signature, object_doc, source_link=Non
         docstring += '{style="float:right;font-size:.875rem;"}'
     docstring += '\n<p style="font-size:.875rem;line-height:1.25rem;">\n('
     for param in signature:
-        docstring += f'**`{param["name"]}`**{param["val"]}, '
+        if "*" in param["name"] or param["val"] == "":
+            docstring += f'**`{param["name"]}`**, '
+        else:
+            docstring += f'**`{param["name"]}`**`{param["val"]}`, '
     if len(signature) > 0:
         docstring = docstring[:-2]
     docstring += ")\n</p>\n\n"
@@ -121,7 +124,9 @@ def get_signature_component(name, anchor, signature, object_doc, source_link=Non
             parameters_str += f"*{group}*"
         docstring += parameters_str
 
-    return docstring + f"\n{object_doc}\n</div>"
+    docstring = html.unescape(f"{docstring}\n{object_doc}\n</div>")
+
+    return docstring
 
 
 def document_object(object_name, package, page_info, full_name=True, anchor_name=None, version_tag_suffix=""):
@@ -218,6 +223,7 @@ def autodoc(object_name, package, methods=None, page_info=None, version_tag_suff
             version_tag_suffix=version_tag_suffix,
             full_name=False,
         )
+        documentation = html.unescape(documentation)
         if methods is None:
             methods = find_documented_methods(obj)
         elif "all" in methods:
@@ -232,7 +238,11 @@ def autodoc(object_name, package, methods=None, page_info=None, version_tag_suff
                 full_name=False,
                 version_tag_suffix=version_tag_suffix,
             )
-            documentation += f"\n#{method_doc}\n"
+            method_doc = html.unescape(method_doc)
+            documentation += f'<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">\n#{method_doc}</div>\n'
+
+    style = '<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">\n'
+    documentation = f"{style}\n{documentation}\n</div>\n"
 
     return documentation
 

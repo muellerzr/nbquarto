@@ -1,15 +1,18 @@
 ---
+title: The `Processor`
 jupyter: python3
 ---
 
-# The `Processor`
 
 > The base class for all notebook processors
 
-### `Processor` {#nbquarto.processor.Processor}
+
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+
+### `class Processor` {#nbquarto.processor.Processor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L22){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`notebook`**: AttributeDictionary)
+(**`notebook`**`: AttributeDictionary`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
@@ -34,26 +37,26 @@ class BasicProcessor(Processor):
     directive = "process"
 
     def process(self, cell):
-        cell.source = f"# This code has been processed!\n&amp;lcub;cell.source}"
+        cell.source = f"# This code has been processed!\n{cell.source}"
 ```
 
-</div>
+</div><div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `has_directives` {#nbquarto.processor.Processor.has_directives}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L63){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`cell`**: AttributeDictionary)
+(**`cell`**`: AttributeDictionary`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 
 Checks if `cell` contains any directives in `self.directives`
 
-</div>
-
+</div></div>
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process` {#nbquarto.processor.Processor.process}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L69){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`cell`**: AttributeDictionary)
+(**`cell`**`: AttributeDictionary`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
@@ -73,12 +76,12 @@ def process(self, cell):
         cell.source = "Found a directive!"
 ```
 
-</div>
-
+</div></div>
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process_cell` {#nbquarto.processor.Processor.process_cell}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L87){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`cell`**: AttributeDictionary)
+(**`cell`**`: AttributeDictionary`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
@@ -91,21 +94,46 @@ correct type and contains the correct directive
 
 
 
+</div></div>
+
 </div>
 
-### `NotebookProcessor` {#nbquarto.processor.NotebookProcessor}
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+
+### `class NotebookProcessor` {#nbquarto.processor.NotebookProcessor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L110){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`path`**: str = None, **`processors`**: list = [], **`notebook`**: AttributeDictionary = None, **`config`**: dict = {}, **`debug`**: bool = False, **`remove_directives`**: bool = True, **`process_immediately`**: bool = False)
+(**`path`**`: str = None`, **`processors`**`: list = []`, **`notebook`**`: AttributeDictionary = None`, **`config`**`: dict = {}`, **`debug`**`: bool = False`, **`remove_directives`**`: bool = True`, **`process_immediately`**`: bool = False`)
 </p>
 
-<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
 
-</div>
+- **path** (`str`, *optional*, defaults to None) --
+  The path to the notebook
+- **processors** (`list`, *optional*, defaults to `[]`) --
+  A list of functions to apply to the notebook
+- **notebook** (`AttributeDictionary`, *optional*, defaults to None) --
+  An object representing all the cells in a Jupyter Notebook.
+  If None, will be loaded from path
+- **processor_args** (`dict`, *optional*, defaults to `{}`) --
+  A dictionary of arguments to pass to a given processor.
+  Should be structured such as: `{"processor_name: {"argument_name": argument_value}}`
+- **debug** (`bool`, *optional*, defaults to `False`) --
+  Whether to print debug statements
+- **remove_directives** (`bool`, *optional*, defaults to `True`) --
+  Whether to remove directives from each cell after processing
+- **process_immediately** (`bool`, *optional*, defaults to `False`) --
+  Whether to process the notebook after initialization
+
+Processes notebook cells and comments in a notebook
+
+
+
+</div><div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process_cell` {#nbquarto.processor.NotebookProcessor.process_cell}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L154){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`processor`**: callable, **`cell`**: AttributeDictionary)
+(**`processor`**`: callable`, **`cell`**`: AttributeDictionary`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">**Parameters:**
@@ -120,8 +148,8 @@ explicitly and instead a user should use `process_notebook`
 
 
 
-</div>
-
+</div></div>
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process_notebook` {#nbquarto.processor.NotebookProcessor.process_notebook}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L172){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
@@ -131,6 +159,8 @@ explicitly and instead a user should use `process_notebook`
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 
 Processes the content of the notebook
+
+</div></div>
 
 </div>
 

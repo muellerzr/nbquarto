@@ -108,6 +108,28 @@ class Processor:
 
 
 class NotebookProcessor:
+    """
+    Processes notebook cells and comments in a notebook
+
+    Args:
+        path (`str`, *optional*, defaults to None):
+            The path to the notebook
+        processors (`list`, *optional*, defaults to `[]`):
+            A list of functions to apply to the notebook
+        notebook (`AttributeDictionary`, *optional*, defaults to None):
+            An object representing all the cells in a Jupyter Notebook.
+            If None, will be loaded from path
+        processor_args (`dict`, *optional*, defaults to `{}`):
+            A dictionary of arguments to pass to a given processor.
+            Should be structured such as: `{"processor_name: {"argument_name": argument_value}}`
+        debug (`bool`, *optional*, defaults to `False`):
+            Whether to print debug statements
+        remove_directives (`bool`, *optional*, defaults to `True`):
+            Whether to remove directives from each cell after processing
+        process_immediately (`bool`, *optional*, defaults to `False`):
+            Whether to process the notebook after initialization
+    """
+
     def __init__(
         self,
         path: str = None,
@@ -118,27 +140,6 @@ class NotebookProcessor:
         remove_directives: bool = True,
         process_immediately: bool = False,
     ):
-        """
-        Processes notebook cells and comments in a notebook
-
-        Args:
-            path (`str`, *optional*, defaults to None):
-                The path to the notebook
-            processors (`list`, *optional*, defaults to []):
-                A list of functions to apply to the notebook
-            notebook (`AttributeDictionary`, *optional*, defaults to None):
-                An object representing all the cells in a Jupyter Notebook.
-                If None, will be loaded from path
-            processor_args (`dict`, *optional*, defaults to {}):
-                A dictionary of arguments to pass to a given processor.
-                Should be structured such as: {"processor_name: {"argument_name": argument_value}}
-            debug (`bool`, *optional*, defaults to False):
-                Whether to print debug statements
-            remove_directives (`bool`, *optional*, defaults to True):
-                Whether to remove directives from each cell after processing
-            process_immediately (`bool`, *optional*, defaults to False):
-                Whether to process the notebook after initialization
-        """
         self.notebook_path = path
         self.notebook = read_notebook(path) if notebook is None else notebook
         self.language = notebook_language(self.notebook)

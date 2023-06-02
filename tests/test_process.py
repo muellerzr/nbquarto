@@ -74,6 +74,9 @@ class TestCodeNotes(unittest.TestCase):
 
     def test_codenotes(self):
         self.notebook_processor.process_notebook()
+        from nbquarto.notebook import write_notebook
+
+        write_notebook(self.test_notebook, "test.ipynb")
         self.assertEqual(self.test_notebook.cells[1].source, "::: {.panel-tabset}\n\n## Code")
         self.assertEqual(self.test_notebook.cells[2].source, "def addition(a,b):\n  return a+b")
         self.assertEqual(self.test_notebook.cells[3].source, "## Code & Explanation")

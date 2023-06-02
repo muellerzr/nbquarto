@@ -1,26 +1,48 @@
 ---
+title: Processors
 jupyter: python3
 ---
 
-# Processors
 > The various `Processor` classes available to use
 
-### `BasicProcessor` {#nbquarto.processors.example.BasicProcessor}
+
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+
+### `class BasicProcessor` {#nbquarto.processors.example.BasicProcessor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/example.py#L17){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`notebook`**: AttributeDictionary)
+(**`notebook`**`: AttributeDictionary`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 
 A basic processor that adds a comment to the top of a cell
 
+Example usage:
+
+```python
+#| process
+def my_function(): 
+    return "Hello world!"
+```
+
+</div>
 </div>
 
-### `AutoDocProcessor` {#nbquarto.processors.autodoc.AutoDocProcessor}
-[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/autodoc.py#L240){style="float:right;font-size:.875rem;"}
+Example outcome:
+
+```python
+# This code has been processed!
+def my_function():
+    return "Hello world!"
+```
+
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+
+### `class AutoDocProcessor` {#nbquarto.processors.autodoc.AutoDocProcessor}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/autodoc.py#L250){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`notebook`**, **`processor_args`**: dict = {})
+(**`notebook`**, **`processor_args`**`: dict = {}`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
@@ -59,11 +81,18 @@ To expose all public methods and include special or hidden methods:
 ```
 
 </div>
+</div>
 
-### `CodeNoteProcessor` {#nbquarto.processors.codenotes.CodeNoteProcessor}
+Example outcome:
+
+(See the auto-generated docs that made this!)
+
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+
+### `class CodeNoteProcessor` {#nbquarto.processors.codenotes.CodeNoteProcessor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/codenotes.py#L124){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`notebook`**: AttributeDictionary)
+(**`notebook`**`: AttributeDictionary`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
@@ -91,4 +120,27 @@ This function adds two numbers together
 ```
 
 </div>
+</div>
+
+Example outcome:
+
+::: {.panel-tabset}
+## Code
+```python
+def addition(a,b):
+  return a+b
+```
+## Code & Explanation
+```python
+def addition(a,b):
+  return a+b
+```
+***
+```{.python}
+addition(a,b)
+```
+:::{style='padding-top: 0px;'}
+This function adds two numbers together
+:::
+:::
 

@@ -1,0 +1,140 @@
+---
+title: Getting started with nbquarto
+---
+
+## Installation
+
+To install the latest stable version of this package with pypi, run:
+
+```bash
+pip install nbquarto
+```
+
+Also please ensure you have Quarto installed on your machine. You can find installation 
+instructions [here](https://quarto.org/docs/get-started/).
+
+To install the latest development version of this package, run:
+
+```bash
+pip install git+https://github.com/muellerzr/nbquarto
+```
+
+## Usage of existing processors
+
+To use nbquarto, you must first create a `config.yaml` file to serve as the 
+project configuration. This file can be placed anywhere.
+
+For example, located [here](config.yaml) in the repo:
+
+```yaml
+documentation_source: nbs
+output_folder: docs
+processors: [
+    nbquarto.processors.example:BasicProcessor,
+    nbquarto.processors.autodoc:AutoDocProcessor
+]
+
+processor_args:
+  AutoDocProcessor: 
+      repo_owner: muellerzr
+      repo_name: nbquarto
+```
+This reads as follows:
+
+- `output_folder`: All notebooks will be saved to a (potentially new) `processed_notebooks` directory
+
+- `processors`: This contains the list of processors we want to apply
+  
+  - `nbquarto.processors.example:BasicProcessor` and `nbquarto.processors.autodoc:AutoDocProcessor`: This is the exact import for the processor to apply. Can also be relative if the package is setup for it (so it could be `nbquarto.processors:AutoDocProcessor`)
+- `processor_args`: This contains a list of `processor`: `args` that should be passed all the time to a particular processor, if it takes in special configuration arguments
+  - `AutoDocProcessor`: This is the name of the processor that will take in arguments following it
+    - `repo_name` and `repo_owner`: These are arguments the `AutoDocProcessor` accepets upon its `__init__`.
+
+After creating your `config.yaml` file, you can run the following command to process your notebooks:
+
+```bash
+nbquarto process \
+    --config_file config.yaml \
+    --notebook_folder nbs 
+```
+
+This will process all notebooks in the `nbs` folder, and save the processed notebooks to the `docs` folder as `qmd` files.
+
+## Creating your own processor
+
+To create your own processor that modifies a Jupyter Notebook is exceedingly straightforward in nbquarto.
+
+Your processor must inherit the `Processor` class, and contains two important items:
+
+- `directives`: `list[str]`, a list of directives to look for in the notebook cell
+- `process`: `Callable[[Cell], None]`, a function that takes in a `Cell` object and modifies it
+
+By creating your own `process` function, this is what will do the hard work of modifying your cell to do 
+whatever you may want. 
+
+The following is a small snippet (taken from the [official example processor](src/nbquarto/processors/example.py)) which simply injects the code:
+
+```python
+# This code has been processed!
+```
+to the top of any cell.
+
+```python
+from nbquarto import Processor
+
+class BasicProcessor(Processor):
+    """
+    A basic processor that adds a comment to the top of a cell
+    """
+
+    directives = "process"
+
+    def process(self, cell):
+        if any(directive in cell.directives_ for directive in self.directives):
+            cell.source = f"# This code has been processed!\n{cell.source}"
+```
+
+The `process` function is what will get applied to the notebook cell, after checking if any directives to look for exist in the cell. 
+
+`cell` objects contain two important aspects of information we can look at:
+- `directives_`: `list[str]`, a list of directives in the cell, such as `process` if it were written as `#| process`
+- `source`: The text that exists inside the cell that you might want to modify
+
+To then use it in your own framework, simply add it to your `config.yaml` file as shown:
+
+```yaml
+documentation_source: nbs
+output_folder: docs
+processors: [
+    module.to.processor:BasicProcessor,
+]
+```
+
+If you want to have your `Processor` take in additional parameters during it's `__init__`, these should be declared in the `config.yaml` as well
+under `processor_args`:
+
+```python
+class ProcessorWithArgs(Processor):
+    """
+    A basic processor that takes in arguments
+    """
+
+    directives = "process"
+
+    def process(self, cell, arg_1, arg_2):
+        if any(directive in cell.directives_ for directive in self.directives):
+            cell.source = f"# This code has been processed with {arg_1}, {arg_2}!\n{cell.source}"
+```
+
+```yaml
+documentation_source: nbs
+output_folder: docs
+processors: [
+    module.to.processor:ProcessorWithArgs,
+]
+
+processor_args:
+  ProcessorWithArgs: 
+      arg_1: "Hello"
+      arg_2: "World"
+```
