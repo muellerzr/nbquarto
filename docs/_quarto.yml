@@ -10,6 +10,9 @@ website:
       - getting_started.qmd
       - section: "Package Reference"
         contents: package_reference/*
+  margin-header: |
+    ![](/logo.png)
+  favicon: /logo.png
 
 format:
   html:
