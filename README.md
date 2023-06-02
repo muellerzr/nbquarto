@@ -2,69 +2,94 @@
 title: "nbquarto"
 ---
 
-# nbquarto
+## Key Terms
 
-`nbquarto` is a small python library built around the idea of creating quick extensions (`Processors`) to use in [Quarto](https://quarto.org) projects.
+- `Cell`: An executing module or Markdown container in a Jupyter Notebook.
+- `Directive`: A pipe-delineated (`|`) comment block recognized by Quarto and `nbquarto`.
+- `Processor`: A class that tailors a cell based on its directives.
 
-The general idea is that a `Processor` handles a "cell" in a notebook (or `qmd` eventually) and modifies its contents for documentation purposes (but can be used for other things). This project is built on the idea (and most of the code) from the [nbdev](https://github.com/fastai/nbdev) project by fast.ai, however it explicitly removes any magicalness from the code and creates a library that is purely "pythonic". 
+## Introducing `nbquarto`: Your Python-Powered Notebook Enhancer
 
-As a result, the codebase here is almost a 1:1 of the code in nbdev *functionally*, while making it a bit easier for users to use, and some key tweaks to the original version of `nbdev`. Most noteably, this library's sole purpose is to create processors, it does not handle anything else that `nbdev` provides. 
+Harness the might of Python with `nbquarto`, a dynamic interface to externally transform Jupyter Notebook cells, designed ideally for [Quarto](https://quarto.org/) projects. 
+This framework streamlines your documentation process by enabling rapid creation and implementation of post-processors for Jupyter Notebooks. 
+Although Quarto-focused, `nbquarto` serves as a valuable asset for any Python project leveraging Jupyter Notebooks.
 
-## Important terms:
+## Getting Started
 
-- `cell`: A singular module or item in a Jupyter Notebook, of which can either execute code written in it or contain Markdown that will be presented to a reader or on a Quarto website
-- `directive`: A comment block in a notebook cell that Quarto (and `nbquarto`) can process or recognize. Generally denoted with a pipe (`|`) after the comment, such as `#| directive` or `# | directive`
-- `Processor`: A class which modifies a cell in a Jupyter Notebook
+Check out the installation directions [here](https://muellerzr.github.io/nbquarto) to get started!
 
-## Creating a `Processor`
+## Choose `nbquarto` for a Superior Experience
 
-As mentioned earlier, a `Processor` take the content in any Jupyter Notebook cell and modify it in some way. The original design intention was to inject Quarto-specific nuonces into the cell to help with code formatting, or to write quick shortcuts to create complex combinations in quarto syntax on the fly.
+Drawing inspiration from [nbdev](https://github.com/fastai/nbdev), `nbquarto` steers towards a more comprehensible and less abstracted interface. 
+It focuses on modifications to Jupyter Notebooks as to fully capitalize on Quarto's abundant features, minimizing dependencies, and enhancing code readability.
 
-The following is a small snippet (taken from the [official example processor](src/nbquarto/processors/example.py)) which simply injects the code:
+## No More Learning Curve with `nbquarto`
+
+Why learn a new language (Lua) to modify content already in Python? 
+`nbquarto` emerges as the Pythonic alternative to Quarto Extensions. Offering flexibility and simplicity at the cost of a negligible increase in processing time, 
+`nbquarto` empowers you to control the narrative.
+
+## How Does `nbquarto` Work?
+
+At the heart of `nbquarto` is a `Processor`. This component modifies a cell to fine-tune code formatting or swiftly craft complex Quarto syntax combinations. 
+Each `cell` object encompasses two crucial elements: `directives_` (a list of cell directives) and `source` (modifiable cell text).
+
+See how easy it is to add a comment to the top of a cell's text source:
 
 ```python
-# This code has been processed!
-```
-to the top of any cell.
+>>> from nbquarto import Processor
 
+>>> class BasicProcessor(Processor):
+...    "A basic processor that adds a comment to the top of a cell's text source."
+...
+...    directives = "process"
+...
+...    def process(self, cell):
+...        if any(directive in cell.directives_ for directive in self.directives):
+...            cell.source = f"# This code has been processed!\n{cell.source}"
+```
+
+And in a notebook cell:
 ```python
-from nbquarto import Processor
+# Input
+>>> #| process
+... print("Hello, world!")
 
-class BasicProcessor(Processor):
-    """
-    A basic processor that adds a comment to the top of a cell
-    """
-
-    directives = "process"
-
-    def process(self, cell):
-        if any(directive in cell.directives_ for directive in self.directives):
-            cell.source = f"# This code has been processed!\n{cell.source}"
+# Output
+>>> # This code has been processed!
+... print("Hello, world!")
 ```
 
-The `process` function is what will get applied to the notebook cell, after checking if any directives to look for exist in the cell. 
+## Simplified Configuration
 
-## Creating a config file
-
-After either creating your own processor, or deciding what processor to use, a config file should be generated that contains the exact imports for processors you want to use, and where processed notebooks should be sent to. 
-
-See below for an example, located [here](tests/test_artifacts/single_processor.yaml) in the repo:
+Say goodbye to confusion with `nbquarto`'s configuration file. This handy feature organizes processor use, notebook paths, and processor constants for a seamless user experience.
 
 ```yaml
-output_folder: processed_notebooks
+documentation_source: tests
 processors: [
-  nbquarto.processors.example:BasicProcessor
+    nbquarto.processors.example:BasicProcessor,
+    nbquarto.processors.autodoc:AutoDocProcessor
 ]
+
+processor_args:
+  AutoDocProcessor: 
+      repo_owner: muellerzr
+      repo_name: nbquarto
 ```
-This reads as follows:
-- `output_folder`: All notebooks will be saved to a (potentially new) `processed_notebooks` directory
-- `processors`: This contains the list of processors we want to apply
-- `nbquarto.processors.example:BasicProcessor`: This is the exact import for the processor to apply
 
-## Calling the `Processor`(s) from the CLI
+## Efficient Notebook Processing
 
-Finally, by calling the `nbquarto-process` command you can process notebooks with your configured `Processor`(s):
+Execute the `nbquarto-process` command to let the configured `Processor`(s) work their magic on your notebooks. All processed notebooks, saved as `qmd` files, land safely in your desired output folder:
 
 ```bash
-nbquarto-process --config_file tests/test_artifacts/single_processor.yaml --notebook_file tests/test_artifacts/test_example.ipynb
+nbquarto-process \
+--config_file tests/test_artifacts/single_processor.yaml \
+--notebook_file tests/test_artifacts/test_example.ipynb \
+--output_folder docs/
 ```
+
+## `nbdev` Reinvented: Experience `nbquarto`
+
+Transform your understanding of `nbdev` with `nbquarto`, a user-friendly reimagining of the original project. 
+Bask in the simplicity of an unambiguous interface for modifying Jupyter Notebooks, enjoy the luxury of minimal abstraction, 
+relish clear error messages, and appreciate the adherence to excellent Python coding practices. 
