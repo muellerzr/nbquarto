@@ -19,9 +19,9 @@ To install the latest development version of this package, run:
 pip install git+https://github.com/muellerzr/nbquarto
 ```
 
-## Usage of existing processors
+## Using existing processors
 
-To use nbquarto, you must first create a `config.yaml` file to serve as the 
+To use `nbquarto`, you must first create a `config.yaml` file to serve as the 
 project configuration. This file can be placed anywhere.
 
 For example, located [here](config.yaml) in the repo:
