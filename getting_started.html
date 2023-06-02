@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>nbquarto</title>
+<title>Getting started with nbquarto</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,7 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">nbquarto</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./getting_started.html">Getting started with nbquarto</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">nbquarto</h1>
+      <h1 class="title">Getting started with nbquarto</h1>
                       </div>
   </div>
     
@@ -143,13 +143,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">nbquarto</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./getting_started.html" class="sidebar-item-text sidebar-link">
+  <a href="./getting_started.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Getting started with nbquarto</span></a>
   </div>
 </li>
@@ -192,14 +192,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#key-terms" id="toc-key-terms" class="nav-link active" data-scroll-target="#key-terms">Key Terms</a></li>
-  <li><a href="#introducing-nbquarto-your-python-powered-notebook-enhancer" id="toc-introducing-nbquarto-your-python-powered-notebook-enhancer" class="nav-link" data-scroll-target="#introducing-nbquarto-your-python-powered-notebook-enhancer">Introducing <code>nbquarto</code>: Your Python-Powered Notebook Enhancer</a></li>
-  <li><a href="#choose-nbquarto-for-a-superior-experience" id="toc-choose-nbquarto-for-a-superior-experience" class="nav-link" data-scroll-target="#choose-nbquarto-for-a-superior-experience">Choose <code>nbquarto</code> for a Superior Experience</a></li>
-  <li><a href="#no-more-learning-curve-with-nbquarto" id="toc-no-more-learning-curve-with-nbquarto" class="nav-link" data-scroll-target="#no-more-learning-curve-with-nbquarto">No More Learning Curve with <code>nbquarto</code></a></li>
-  <li><a href="#how-does-nbquarto-work" id="toc-how-does-nbquarto-work" class="nav-link" data-scroll-target="#how-does-nbquarto-work">How Does <code>nbquarto</code> Work?</a></li>
-  <li><a href="#simplified-configuration" id="toc-simplified-configuration" class="nav-link" data-scroll-target="#simplified-configuration">Simplified Configuration</a></li>
-  <li><a href="#efficient-notebook-processing" id="toc-efficient-notebook-processing" class="nav-link" data-scroll-target="#efficient-notebook-processing">Efficient Notebook Processing</a></li>
-  <li><a href="#nbdev-reinvented-experience-nbquarto" id="toc-nbdev-reinvented-experience-nbquarto" class="nav-link" data-scroll-target="#nbdev-reinvented-experience-nbquarto"><code>nbdev</code> Reinvented: Experience <code>nbquarto</code></a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#usage-of-existing-processors" id="toc-usage-of-existing-processors" class="nav-link" data-scroll-target="#usage-of-existing-processors">Usage of existing processors</a></li>
+  <li><a href="#creating-your-own-processor" id="toc-creating-your-own-processor" class="nav-link" data-scroll-target="#creating-your-own-processor">Creating your own processor</a></li>
   </ul>
 </nav>
     </div>
@@ -209,74 +204,103 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="key-terms" class="level2">
-<h2 class="anchored" data-anchor-id="key-terms">Key Terms</h2>
+<section id="installation" class="level2">
+<h2 class="anchored" data-anchor-id="installation">Installation</h2>
+<p>To install the latest stable version of this package with pypi, run:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install nbquarto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Also please ensure you have Quarto installed on your machine. You can find installation instructions <a href="https://quarto.org/docs/get-started/">here</a>.</p>
+<p>To install the latest development version of this package, run:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install git+https://github.com/muellerzr/nbquarto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="usage-of-existing-processors" class="level2">
+<h2 class="anchored" data-anchor-id="usage-of-existing-processors">Usage of existing processors</h2>
+<p>To use nbquarto, you must first create a <code>config.yaml</code> file to serve as the project configuration. This file can be placed anywhere.</p>
+<p>For example, located <a href="config.yaml">here</a> in the repo:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">documentation_source</span><span class="kw">:</span><span class="at"> nbs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">output_folder</span><span class="kw">:</span><span class="at"> docs</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">processors</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    nbquarto.processors.example:BasicProcessor</span><span class="kw">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">    nbquarto.processors.autodoc:AutoDocProcessor</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">processor_args</span><span class="kw">:</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">AutoDocProcessor</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">repo_owner</span><span class="kw">:</span><span class="at"> muellerzr</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">repo_name</span><span class="kw">:</span><span class="at"> nbquarto</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This reads as follows:</p>
 <ul>
-<li><code>Cell</code>: An executing module or Markdown container in a Jupyter Notebook.</li>
-<li><code>Directive</code>: A pipe-delineated (<code>|</code>) comment block recognized by Quarto and <code>nbquarto</code>.</li>
-<li><code>Processor</code>: A class that tailors a cell based on its directives.</li>
+<li><p><code>output_folder</code>: All notebooks will be saved to a (potentially new) <code>processed_notebooks</code> directory</p></li>
+<li><p><code>processors</code>: This contains the list of processors we want to apply</p>
+<ul>
+<li><code>nbquarto.processors.example:BasicProcessor</code> and <code>nbquarto.processors.autodoc:AutoDocProcessor</code>: This is the exact import for the processor to apply. Can also be relative if the package is setup for it (so it could be <code>nbquarto.processors:AutoDocProcessor</code>)</li>
+</ul></li>
+<li><p><code>processor_args</code>: This contains a list of <code>processor</code>: <code>args</code> that should be passed all the time to a particular processor, if it takes in special configuration arguments</p>
+<ul>
+<li><code>AutoDocProcessor</code>: This is the name of the processor that will take in arguments following it
+<ul>
+<li><code>repo_name</code> and <code>repo_owner</code>: These are arguments the <code>AutoDocProcessor</code> accepets upon its <code>__init__</code>.</li>
+</ul></li>
+</ul></li>
 </ul>
+<p>After creating your <code>config.yaml</code> file, you can run the following command to process your notebooks:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nbquarto</span> process <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--config_file</span> config.yaml <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--notebook_folder</span> nbs </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will process all notebooks in the <code>nbs</code> folder, and save the processed notebooks to the <code>docs</code> folder as <code>qmd</code> files.</p>
 </section>
-<section id="introducing-nbquarto-your-python-powered-notebook-enhancer" class="level2">
-<h2 class="anchored" data-anchor-id="introducing-nbquarto-your-python-powered-notebook-enhancer">Introducing <code>nbquarto</code>: Your Python-Powered Notebook Enhancer</h2>
-<p>Harness the might of Python with <code>nbquarto</code>, a dynamic interface to externally transform Jupyter Notebook cells, designed ideally for <a href="https://quarto.org/">Quarto</a> projects. This framework streamlines your documentation process by enabling rapid creation and implementation of post-processors for Jupyter Notebooks. Although Quarto-focused, <code>nbquarto</code> serves as a valuable asset for any Python project leveraging Jupyter Notebooks.</p>
-</section>
-<section id="choose-nbquarto-for-a-superior-experience" class="level2">
-<h2 class="anchored" data-anchor-id="choose-nbquarto-for-a-superior-experience">Choose <code>nbquarto</code> for a Superior Experience</h2>
-<p>Drawing inspiration from <a href="https://github.com/fastai/nbdev">nbdev</a>, <code>nbquarto</code> steers towards a more comprehensible and less abstracted interface. It focuses on modifications to Jupyter Notebooks as to fully capitalize on Quarto’s abundant features, minimizing dependencies, and enhancing code readability.</p>
-</section>
-<section id="no-more-learning-curve-with-nbquarto" class="level2">
-<h2 class="anchored" data-anchor-id="no-more-learning-curve-with-nbquarto">No More Learning Curve with <code>nbquarto</code></h2>
-<p>Why learn a new language (Lua) to modify content already in Python? <code>nbquarto</code> emerges as the Pythonic alternative to Quarto Extensions. Offering flexibility and simplicity at the cost of a negligible increase in processing time, <code>nbquarto</code> empowers you to control the narrative.</p>
-</section>
-<section id="how-does-nbquarto-work" class="level2">
-<h2 class="anchored" data-anchor-id="how-does-nbquarto-work">How Does <code>nbquarto</code> Work?</h2>
-<p>At the heart of <code>nbquarto</code> is a <code>Processor</code>. This component modifies a cell to fine-tune code formatting or swiftly craft complex Quarto syntax combinations. Each <code>cell</code> object encompasses two crucial elements: <code>directives_</code> (a list of cell directives) and <code>source</code> (modifiable cell text).</p>
-<p>See how easy it is to add a comment to the top of a cell’s text source:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> nbquarto <span class="im">import</span> Processor</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">class</span> BasicProcessor(Processor):</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>...    <span class="st">"A basic processor that adds a comment to the top of a cell's text source."</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>...    directives <span class="op">=</span> <span class="st">"process"</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>...    <span class="kw">def</span> process(<span class="va">self</span>, cell):</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>...        <span class="cf">if</span> <span class="bu">any</span>(directive <span class="kw">in</span> cell.directives_ <span class="cf">for</span> directive <span class="kw">in</span> <span class="va">self</span>.directives):</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>...            cell.source <span class="op">=</span> <span class="ss">f"# This code has been processed!</span><span class="ch">\n</span><span class="sc">{</span>cell<span class="sc">.</span>source<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>And in a notebook cell:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Input</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">#| process</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>... <span class="bu">print</span>(<span class="st">"Hello, world!"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Output</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># This code has been processed!</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>... <span class="bu">print</span>(<span class="st">"Hello, world!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="simplified-configuration" class="level2">
-<h2 class="anchored" data-anchor-id="simplified-configuration">Simplified Configuration</h2>
-<p>Say goodbye to confusion with <code>nbquarto</code>’s configuration file. This handy feature organizes processor use, notebook paths, and processor constants for a seamless user experience.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">documentation_source</span><span class="kw">:</span><span class="at"> tests</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">processors</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">    nbquarto.processors.example:BasicProcessor</span><span class="kw">,</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    nbquarto.processors.autodoc:AutoDocProcessor</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">processor_args</span><span class="kw">:</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">AutoDocProcessor</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">repo_owner</span><span class="kw">:</span><span class="at"> muellerzr</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">repo_name</span><span class="kw">:</span><span class="at"> nbquarto</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="efficient-notebook-processing" class="level2">
-<h2 class="anchored" data-anchor-id="efficient-notebook-processing">Efficient Notebook Processing</h2>
-<p>Execute the <code>nbquarto-process</code> command to let the configured <code>Processor</code>(s) work their magic on your notebooks. All processed notebooks, saved as <code>qmd</code> files, land safely in your desired output folder:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nbquarto-process</span> <span class="dt">\</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>--config_file tests/test_artifacts/single_processor.yaml <span class="dt">\</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>--notebook_file tests/test_artifacts/test_example.ipynb <span class="dt">\</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>--output_folder docs/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="nbdev-reinvented-experience-nbquarto" class="level2">
-<h2 class="anchored" data-anchor-id="nbdev-reinvented-experience-nbquarto"><code>nbdev</code> Reinvented: Experience <code>nbquarto</code></h2>
-<p>Transform your understanding of <code>nbdev</code> with <code>nbquarto</code>, a user-friendly reimagining of the original project. Bask in the simplicity of an unambiguous interface for modifying Jupyter Notebooks, enjoy the luxury of minimal abstraction, relish clear error messages, and appreciate the adherence to excellent Python coding practices.</p>
+<section id="creating-your-own-processor" class="level2">
+<h2 class="anchored" data-anchor-id="creating-your-own-processor">Creating your own processor</h2>
+<p>To create your own processor that modifies a Jupyter Notebook is exceedingly straightforward in nbquarto.</p>
+<p>Your processor must inherit the <code>Processor</code> class, and contains two important items:</p>
+<ul>
+<li><code>directives</code>: <code>list[str]</code>, a list of directives to look for in the notebook cell</li>
+<li><code>process</code>: <code>Callable[[Cell], None]</code>, a function that takes in a <code>Cell</code> object and modifies it</li>
+</ul>
+<p>By creating your own <code>process</code> function, this is what will do the hard work of modifying your cell to do whatever you may want.</p>
+<p>The following is a small snippet (taken from the <a href="src/nbquarto/processors/example.py">official example processor</a>) which simply injects the code:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This code has been processed!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>to the top of any cell.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nbquarto <span class="im">import</span> Processor</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BasicProcessor(Processor):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    A basic processor that adds a comment to the top of a cell</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    directives <span class="op">=</span> <span class="st">"process"</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process(<span class="va">self</span>, cell):</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">any</span>(directive <span class="kw">in</span> cell.directives_ <span class="cf">for</span> directive <span class="kw">in</span> <span class="va">self</span>.directives):</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            cell.source <span class="op">=</span> <span class="ss">f"# This code has been processed!</span><span class="ch">\n</span><span class="sc">{</span>cell<span class="sc">.</span>source<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>process</code> function is what will get applied to the notebook cell, after checking if any directives to look for exist in the cell.</p>
+<p><code>cell</code> objects contain two important aspects of information we can look at: - <code>directives_</code>: <code>list[str]</code>, a list of directives in the cell, such as <code>process</code> if it were written as <code>#| process</code> - <code>source</code>: The text that exists inside the cell that you might want to modify</p>
+<p>To then use it in your own framework, simply add it to your <code>config.yaml</code> file as shown:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">documentation_source</span><span class="kw">:</span><span class="at"> nbs</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">output_folder</span><span class="kw">:</span><span class="at"> docs</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">processors</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="at">    module.to.processor:BasicProcessor</span><span class="kw">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you want to have your <code>Processor</code> take in additional parameters during it’s <code>__init__</code>, these should be declared in the <code>config.yaml</code> as well under <code>processor_args</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ProcessorWithArgs(Processor):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A basic processor that takes in arguments</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    directives <span class="op">=</span> <span class="st">"process"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process(<span class="va">self</span>, cell, arg_1, arg_2):</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">any</span>(directive <span class="kw">in</span> cell.directives_ <span class="cf">for</span> directive <span class="kw">in</span> <span class="va">self</span>.directives):</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            cell.source <span class="op">=</span> <span class="ss">f"# This code has been processed with </span><span class="sc">{</span>arg_1<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>arg_2<span class="sc">}</span><span class="ss">!</span><span class="ch">\n</span><span class="sc">{</span>cell<span class="sc">.</span>source<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">documentation_source</span><span class="kw">:</span><span class="at"> nbs</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">output_folder</span><span class="kw">:</span><span class="at"> docs</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">processors</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">    module.to.processor:ProcessorWithArgs</span><span class="kw">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">processor_args</span><span class="kw">:</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ProcessorWithArgs</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">arg_1</span><span class="kw">:</span><span class="at"> </span><span class="st">"Hello"</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">arg_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"World"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

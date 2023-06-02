@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.3.340">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>processor</title>
+<title>The Processor</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,9 +17,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -46,43 +47,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -125,56 +96,88 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../package_reference/notebook.html">Package Reference</a></li><li class="breadcrumb-item"><a href="../package_reference/processor.html">The <code>Processor</code></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">The <code>Processor</code></h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-      <div class="mt-2 flex-shrink-0 align-items-center">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">nbquarto</a>
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nbquarto</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../getting_started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting started with nbquarto</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Package Reference</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Package Reference</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../package_reference/notebook.html" class="sidebar-item-text sidebar-link">Notebook Utilities</a>
+  <a href="../package_reference/notebook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Notebook Utilities</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../package_reference/processors.html" class="sidebar-item-text sidebar-link">Processors</a>
+  <a href="../package_reference/processor.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">The <code>Processor</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../package_reference/processor.html" class="sidebar-item-text sidebar-link active">The <code>Processor</code></a>
+  <a href="../package_reference/processors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processors</span></a>
   </div>
 </li>
       </ul>
@@ -182,44 +185,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-processor" id="toc-the-processor" class="nav-link active" data-scroll-target="#the-processor">The <code>Processor</code></a>
+  <li><a href="#nbquarto.processor.Processor" id="toc-nbquarto.processor.Processor" class="nav-link active" data-scroll-target="#nbquarto.processor.Processor"><code>class Processor</code></a>
   <ul>
-  <li><a href="#nbquarto.processor.Processor" id="toc-nbquarto.processor.Processor" class="nav-link" data-scroll-target="#nbquarto.processor.Processor"><code>Processor</code></a>
-  <ul class="collapse">
   <li><a href="#nbquarto.processor.Processor.has_directives" id="toc-nbquarto.processor.Processor.has_directives" class="nav-link" data-scroll-target="#nbquarto.processor.Processor.has_directives"><code>has_directives</code></a></li>
   <li><a href="#nbquarto.processor.Processor.process" id="toc-nbquarto.processor.Processor.process" class="nav-link" data-scroll-target="#nbquarto.processor.Processor.process"><code>process</code></a></li>
   <li><a href="#nbquarto.processor.Processor.process_cell" id="toc-nbquarto.processor.Processor.process_cell" class="nav-link" data-scroll-target="#nbquarto.processor.Processor.process_cell"><code>process_cell</code></a></li>
   </ul></li>
-  <li><a href="#nbquarto.processor.NotebookProcessor" id="toc-nbquarto.processor.NotebookProcessor" class="nav-link" data-scroll-target="#nbquarto.processor.NotebookProcessor"><code>NotebookProcessor</code></a>
-  <ul class="collapse">
+  <li><a href="#nbquarto.processor.NotebookProcessor" id="toc-nbquarto.processor.NotebookProcessor" class="nav-link" data-scroll-target="#nbquarto.processor.NotebookProcessor"><code>class NotebookProcessor</code></a>
+  <ul>
   <li><a href="#nbquarto.processor.NotebookProcessor.process_cell" id="toc-nbquarto.processor.NotebookProcessor.process_cell" class="nav-link" data-scroll-target="#nbquarto.processor.NotebookProcessor.process_cell"><code>process_cell</code></a></li>
   <li><a href="#nbquarto.processor.NotebookProcessor.process_notebook" id="toc-nbquarto.processor.NotebookProcessor.process_notebook" class="nav-link" data-scroll-target="#nbquarto.processor.NotebookProcessor.process_notebook"><code>process_notebook</code></a></li>
-  </ul></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
-<section id="the-processor" class="level1">
-<h1>The <code>Processor</code></h1>
+
 <blockquote class="blockquote">
 <p>The base class for all notebook processors</p>
 </blockquote>
-<section id="nbquarto.processor.Processor" class="level3">
-<h3 class="anchored" data-anchor-id="nbquarto.processor.Processor"><code>Processor</code></h3>
+<section id="nbquarto.processor.Processor" class="level3" style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+<h3 class="anchored" data-anchor-id="nbquarto.processor.Processor"><code>class Processor</code></h3>
 <a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L22" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>notebook</code></strong>: AttributeDictionary)
+(<strong><code>notebook</code></strong><code>: AttributeDictionary</code>)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 <p>Base class for all notebook processors. Any processors should inherit this class.</p>
@@ -232,23 +232,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    directive <span class="op">=</span> <span class="st">"process"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process(<span class="va">self</span>, cell):</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        cell.source <span class="op">=</span> <span class="ss">f"# This code has been processed!</span><span class="ch">\n</span><span class="ss">&amp;amp;lcub;cell.source</span><span class="er">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        cell.source <span class="op">=</span> <span class="ss">f"# This code has been processed!</span><span class="ch">\n</span><span class="sc">{</span>cell<span class="sc">.</span>source<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="nbquarto.processor.Processor.has_directives" class="level4">
+<section id="nbquarto.processor.Processor.has_directives" class="level4" style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 <h4 class="anchored" data-anchor-id="nbquarto.processor.Processor.has_directives"><code>has_directives</code></h4>
 <a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L63" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>cell</code></strong>: AttributeDictionary)
+(<strong><code>cell</code></strong><code>: AttributeDictionary</code>)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 <p>Checks if <code>cell</code> contains any directives in <code>self.directives</code></p>
 </div>
 </section>
-<section id="nbquarto.processor.Processor.process" class="level4">
+<section id="nbquarto.processor.Processor.process" class="level4" style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 <h4 class="anchored" data-anchor-id="nbquarto.processor.Processor.process"><code>process</code></h4>
 <a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L69" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>cell</code></strong>: AttributeDictionary)
+(<strong><code>cell</code></strong><code>: AttributeDictionary</code>)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 <p><strong>Parameters:</strong></p>
@@ -262,11 +262,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        cell.source <span class="op">=</span> <span class="st">"Found a directive!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="nbquarto.processor.Processor.process_cell" class="level4">
+<section id="nbquarto.processor.Processor.process_cell" class="level4" style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 <h4 class="anchored" data-anchor-id="nbquarto.processor.Processor.process_cell"><code>process_cell</code></h4>
 <a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L87" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>cell</code></strong>: AttributeDictionary)
+(<strong><code>cell</code></strong><code>: AttributeDictionary</code>)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 <p><strong>Parameters:</strong></p>
@@ -277,20 +277,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 </section>
-<section id="nbquarto.processor.NotebookProcessor" class="level3">
-<h3 class="anchored" data-anchor-id="nbquarto.processor.NotebookProcessor"><code>NotebookProcessor</code></h3>
+<section id="nbquarto.processor.NotebookProcessor" class="level3" style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+<h3 class="anchored" data-anchor-id="nbquarto.processor.NotebookProcessor"><code>class NotebookProcessor</code></h3>
 <a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L110" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>path</code></strong>: str = None, <strong><code>processors</code></strong>: list = [], <strong><code>notebook</code></strong>: AttributeDictionary = None, <strong><code>config</code></strong>: dict = {}, <strong><code>debug</code></strong>: bool = False, <strong><code>remove_directives</code></strong>: bool = True, <strong><code>process_immediately</code></strong>: bool = False)
+(<strong><code>path</code></strong><code>: str = None</code>, <strong><code>processors</code></strong><code>: list = []</code>, <strong><code>notebook</code></strong><code>: AttributeDictionary = None</code>, <strong><code>config</code></strong><code>: dict = {}</code>, <strong><code>debug</code></strong><code>: bool = False</code>, <strong><code>remove_directives</code></strong><code>: bool = True</code>, <strong><code>process_immediately</code></strong><code>: bool = False</code>)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
-
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong>path</strong> (<code>str</code>, <em>optional</em>, defaults to None) – The path to the notebook</li>
+<li><strong>processors</strong> (<code>list</code>, <em>optional</em>, defaults to <code>[]</code>) – A list of functions to apply to the notebook</li>
+<li><strong>notebook</strong> (<code>AttributeDictionary</code>, <em>optional</em>, defaults to None) – An object representing all the cells in a Jupyter Notebook. If None, will be loaded from path</li>
+<li><strong>processor_args</strong> (<code>dict</code>, <em>optional</em>, defaults to <code>{}</code>) – A dictionary of arguments to pass to a given processor. Should be structured such as: <code>{"processor_name: {"argument_name": argument_value}}</code></li>
+<li><strong>debug</strong> (<code>bool</code>, <em>optional</em>, defaults to <code>False</code>) – Whether to print debug statements</li>
+<li><strong>remove_directives</strong> (<code>bool</code>, <em>optional</em>, defaults to <code>True</code>) – Whether to remove directives from each cell after processing</li>
+<li><strong>process_immediately</strong> (<code>bool</code>, <em>optional</em>, defaults to <code>False</code>) – Whether to process the notebook after initialization</li>
+</ul>
+<p>Processes notebook cells and comments in a notebook</p>
 </div>
-<section id="nbquarto.processor.NotebookProcessor.process_cell" class="level4">
+<section id="nbquarto.processor.NotebookProcessor.process_cell" class="level4" style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 <h4 class="anchored" data-anchor-id="nbquarto.processor.NotebookProcessor.process_cell"><code>process_cell</code></h4>
 <a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L154" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
-(<strong><code>processor</code></strong>: callable, <strong><code>cell</code></strong>: AttributeDictionary)
+(<strong><code>processor</code></strong><code>: callable</code>, <strong><code>cell</code></strong><code>: AttributeDictionary</code>)
 </p>
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 <p><strong>Parameters:</strong></p>
@@ -301,7 +311,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Processes a single cell of a notebook. Should not be called explicitly and instead a user should use <code>process_notebook</code></p>
 </div>
 </section>
-<section id="nbquarto.processor.NotebookProcessor.process_notebook" class="level4">
+<section id="nbquarto.processor.NotebookProcessor.process_notebook" class="level4" style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 <h4 class="anchored" data-anchor-id="nbquarto.processor.NotebookProcessor.process_notebook"><code>process_notebook</code></h4>
 <a href="https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L172" style="float:right;font-size:.875rem;">&lt;source&gt;</a>
 <p style="font-size:.875rem;line-height:1.25rem;">
@@ -310,11 +320,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 <p>Processes the content of the notebook</p>
 </div>
+</section>
+</section>
 
 
-</section>
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -344,9 +353,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -411,6 +434,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {

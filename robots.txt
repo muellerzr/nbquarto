@@ -1,1 +1,1 @@
-Sitemap: https://github.com/muellerzr/nbquarto/sitemap.xml
+Sitemap: https://www.github.com/muellerzr/nbquarto/sitemap.xml

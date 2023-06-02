@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/muellerzr/nbquarto/package_reference/notebook.html</loc>
-    <lastmod>2023-06-01T21:00:52.028Z</lastmod>
+    <loc>https://www.github.com/muellerzr/nbquarto/package_reference/notebook.html</loc>
+    <lastmod>2023-06-02T00:04:52.360Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/muellerzr/nbquarto/package_reference/processors.html</loc>
-    <lastmod>2023-06-01T21:00:54.788Z</lastmod>
+    <loc>https://www.github.com/muellerzr/nbquarto/package_reference/processors.html</loc>
+    <lastmod>2023-06-02T00:04:53.804Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/muellerzr/nbquarto/package_reference/processor.html</loc>
-    <lastmod>2023-06-01T21:00:57.578Z</lastmod>
+    <loc>https://www.github.com/muellerzr/nbquarto/package_reference/processor.html</loc>
+    <lastmod>2023-06-02T00:04:55.212Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/muellerzr/nbquarto/index.html</loc>
-    <lastmod>2023-06-01T21:00:57.868Z</lastmod>
+    <loc>https://www.github.com/muellerzr/nbquarto/getting_started.html</loc>
+    <lastmod>2023-06-02T00:04:55.428Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.github.com/muellerzr/nbquarto/index.html</loc>
+    <lastmod>2023-06-02T00:04:55.624Z</lastmod>
   </url>
 </urlset>
