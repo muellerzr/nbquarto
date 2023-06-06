@@ -18,6 +18,11 @@ from ..notebook import NotebookCell, make_cell
 from ..processor import Processor
 
 
+raise NotImplementedError(
+    "Hi! This processor isn't quite ready yet, please use `nbquarto.processors.codenotes` instead."
+)
+
+
 def make_panel_tabset(first_tab: str = "Code", second_tab: str = "Code & Explanation") -> List[NotebookCell]:
     """
     Creates a panel tabset with two tabs
