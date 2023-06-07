@@ -151,4 +151,3 @@ Makes a blank notebook cell
 </div>
 </div>
 
-

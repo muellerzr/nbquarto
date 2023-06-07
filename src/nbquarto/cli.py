@@ -1,11 +1,9 @@
 import argparse
 import logging
-import subprocess
 from pathlib import Path, PurePosixPath
 
 import yaml
 
-from .notebook import write_notebook
 from .processor import NotebookProcessor
 
 
@@ -83,10 +81,46 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
 
     output_location = output_folder / notebook_location.relative_to(documentation_source)
     Path(output_location.parent).mkdir(parents=True, exist_ok=True)
-    write_notebook(notebook_processor.notebook, output_location)
+
+    # Convert notebook to `qmd`
+    notebook = notebook_processor.notebook
+
+    # Initialize the markdown string
+    md = []
+
+    # For each cell in the notebook
+    for i, cell in enumerate(notebook["cells"]):
+        if i == 0 and cell["cell_type"] == "markdown":
+            # If the first cell is markdown, it's probably the title
+            # so add it to the markdown string
+            content = cell["source"].split("\n")
+            title = content[0]
+            # Generate quarto metadata
+            md.append(f'---\ntitle: {title.replace("#", "").lstrip().rstrip()}\njupyter: python3\n---\n')
+            md.append("\n".join(content[1:]))
+            # Add a newline to separate cells
+            md.append("\n")
+
+        # Depending on the cell's type, handle it differently
+        elif cell["cell_type"] in ("markdown", "raw"):
+            md.extend(cell["source"].split("\n"))
+
+        elif cell["cell_type"] == "code":
+            # Add code wrapped in triple backticks and curly braces
+            md.append("```{python}")
+            md.extend(cell["source"].split("\n"))
+            md.append("```")
+
+        else:
+            raise ValueError(f"Unexpected cell type {cell['cell_type']}")
+
+    # Join the markdown lines into a single string
+    md_source = "\n".join(md)
+    output_location = output_location.with_suffix(".qmd")
+
+    with open(output_location, "w") as f:
+        f.write(md_source)
     logger.info(f"Successfully processed notebook at {notebook_location} and saved to {output_location}")
-    subprocess.run(["quarto", "convert", output_location])
-    Path(output_location).unlink()
 
 
 def main():
