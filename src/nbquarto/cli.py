@@ -117,16 +117,13 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
         else:
             raise ValueError(f"Unexpected cell type {cell['cell_type']}")
 
-        # Add a newline to separate cells
-        # if i > 0:
-        #     md.append("\n")
-
     # Join the markdown lines into a single string
     md_source = "\n".join(md)
     output_location = output_location.with_suffix(".qmd")
 
     with open(output_location, "w") as f:
         f.write(md_source)
+    logger.info(f"Successfully processed notebook at {notebook_location} and saved to {output_location}")
 
 
 def main():
