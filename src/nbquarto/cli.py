@@ -86,7 +86,7 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
     notebook = notebook_processor.notebook
 
     # Initialize the markdown string
-    md = []
+    md = ""
 
     # For each cell in the notebook
     for i, cell in enumerate(notebook["cells"]):
@@ -95,31 +95,23 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
             # so add it to the markdown string
             content = cell["source"].split("\n")
             title = content[0]
-            md.append(f'---\ntitle: {title.replace("#", "").lstrip().rstrip()}\njupyter: python3\n---\n')
-            md.append("\n".join(content[1:]))
-            # Add a newline to separate cells
-            md.append("\n")
+            md += f'---\ntitle: {title.replace("#", "").lstrip().rstrip()}\njupyter: python3\n---\n'
+            md += "\n".join(content[1:])
 
         # Depending on the cell's type, handle it differently
-        elif cell["cell_type"] == "markdown":
-            md.extend(cell["source"].split("\n"))
-
-        elif cell["cell_type"] == "raw":
-            # Currently, just treat raw cells like markdown cells
-            md.extend(cell["source"].split("\n"))
+        elif cell["cell_type"] in ("markdown", "raw"):
+            md += cell["source"]
 
         elif cell["cell_type"] == "code":
             # Add code wrapped in triple backticks and curly braces
-            md.append("```{python}")
-            md.extend(cell["source"].split("\n"))
-            md.append("```")
+            md += f'```{{python}}\n{cell["source"]}\n```'
 
         else:
             raise ValueError(f"Unexpected cell type {cell['cell_type']}")
 
-        # Add a newline to separate cells
-        if i > 0:
-            md.append("\n")
+        # # Add a newline to separate cells
+        # if i > 0:
+        #     md.append("\n")
 
     # Join the markdown lines into a single string
     md_source = "\n".join(md)
