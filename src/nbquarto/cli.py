@@ -98,6 +98,7 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
             md.append(f'---\ntitle: {title.replace("#", "").lstrip().rstrip()}\njupyter: python3\n---\n')
             md.append("\n".join(content[1:]))
             # Add a newline to separate cells
+            md.append("\n\n")
 
         # Depending on the cell's type, handle it differently
         elif cell["cell_type"] == "markdown":
