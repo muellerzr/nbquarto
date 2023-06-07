@@ -95,7 +95,7 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
             # so add it to the markdown string
             content = cell["source"].split("\n")
             title = content[0]
-            md.append(f'---\ntitle: {title.replace("#", "").lstrip().rstrip()}\njupyter: python3\n---\n\n')
+            md.append(f'---\ntitle: {title.replace("#", "").lstrip().rstrip()}\njupyter: python3\n---\n')
             md.append("\n".join(content[1:]))
             # Add a newline to separate cells
             md.append("\n")

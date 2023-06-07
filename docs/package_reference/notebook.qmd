@@ -4,7 +4,6 @@ jupyter: python3
 ---
 
 
-
 > Functions to help with processing of notebooks. Most come from `nbdev`
 
 
