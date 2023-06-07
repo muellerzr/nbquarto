@@ -95,17 +95,14 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
             # so add it to the markdown string
             content = cell["source"].split("\n")
             title = content[0]
+            # Generate quarto metadata
             md.append(f'---\ntitle: {title.replace("#", "").lstrip().rstrip()}\njupyter: python3\n---\n')
             md.append("\n".join(content[1:]))
             # Add a newline to separate cells
             md.append("\n")
 
         # Depending on the cell's type, handle it differently
-        elif cell["cell_type"] == "markdown":
-            md.extend(cell["source"].split("\n"))
-
-        elif cell["cell_type"] == "raw":
-            # Currently, just treat raw cells like markdown cells
+        elif cell["cell_type"] in ("markdown", "raw"):
             md.extend(cell["source"].split("\n"))
 
         elif cell["cell_type"] == "code":
