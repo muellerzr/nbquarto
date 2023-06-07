@@ -24,13 +24,12 @@ pip install git+https://github.com/muellerzr/nbquarto
 To use `nbquarto`, you must first create a `config.yaml` file to serve as the 
 project configuration. This file can be placed anywhere.
 
-For example, located [here](config.yaml) in the repo:
+For example, located [here](https://github.com/muellerzr/nbquarto/blob/main/config.yaml) in the repo:
 
 ```yaml
 documentation_source: nbs
 output_folder: docs
 processors: [
-    nbquarto.processors.example:BasicProcessor,
     nbquarto.processors.autodoc:AutoDocProcessor
 ]
 

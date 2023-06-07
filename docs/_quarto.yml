@@ -13,6 +13,21 @@ website:
   margin-header: |
     ![](/logo.png)
   favicon: /logo.png
+  repo-url: https://github.com/muellerzr/nbquarto
+  issue-url: https://github.com/muellerzr/nbquarto/issues/new
+  repo-actions: [edit, issue]
+  page-navigation: true
+
+  page-footer: 
+    right:
+      - icon: github
+        href: https://github.com/muellerzr/nbquarto
+        aria-label: nbquarto GitHub
+  navbar:
+    tools:
+      - icon: github
+        href: https://github.com/muellerzr/nbquarto
+        aria-label: nbquarto GitHub
 
 format:
   html:
