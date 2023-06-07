@@ -250,7 +250,7 @@ def autodoc(object_name, package, methods=None, page_info=None, version_tag_suff
 class AutoDocProcessor(Processor):
     """
     A processor which will automatically generate API documentation for a given class or method.
-    Largely relies on the implementation in [hf-doc-builder](https://github.comn/huggingface/doc-builder),
+    Largely relies on the implementation in [hf-doc-builder](https://github.com/huggingface/doc-builder),
     while adding some customizations for Quarto.
 
     This processor expects the following directives:
