@@ -5,6 +5,9 @@ jupyter: python3
 
 
 > Functions to help with processing of notebooks. Most come from `nbdev`
+
+
+
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
 ### `class NotebookCell` {#nbquarto.notebook.NotebookCell}
