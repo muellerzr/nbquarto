@@ -4,6 +4,7 @@ jupyter: python3
 ---
 
 
+
 > Functions to help with processing of notebooks. Most come from `nbdev`
 
 
@@ -39,6 +40,8 @@ Sets the source attribute of the cell as a string and removes parsed directives
 
 </div>
 
+
+
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
 ### `nbquarto.notebook.dict2notebook` {#nbquarto.notebook.dict2notebook}
@@ -59,6 +62,8 @@ Converts dictionary `d` to an `AttributeDictionary`
 </div>
 </div>
 
+
+
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
 ### `nbquarto.notebook.read_notebook` {#nbquarto.notebook.read_notebook}
@@ -78,6 +83,8 @@ Reads a Jupyter Notebook from a filepath
 
 </div>
 </div>
+
+
 
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
@@ -100,6 +107,8 @@ Writes the contents of `notebook` to `path`
 
 </div>
 </div>
+
+
 
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
@@ -127,6 +136,8 @@ Creates a new empty notebook
 </div>
 </div>
 
+
+
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
 ### `nbquarto.notebook.make_cell` {#nbquarto.notebook.make_cell}
@@ -150,5 +161,8 @@ Makes a blank notebook cell
 
 </div>
 </div>
+
+
+
 
 
