@@ -1,7 +1,3 @@
----
-title: "nbquarto"
----
-
 ## Key Terms
 
 - `Cell`: An executing module or Markdown container in a Jupyter Notebook.

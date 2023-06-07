@@ -10,6 +10,7 @@ setup(
     license='MIT',
     description='A minimal nbdev version, focused on writing quarto extensions',
     long_description=open('README.md').read(),
+    long_description_content_type="text/markdown",
     install_requires=["pyyaml", "hf-doc-builder~=0.4.0"],
     extras_require=extras,
     keywords="quarto",
