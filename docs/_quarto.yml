@@ -5,11 +5,7 @@ project:
 website:
   sidebar:
     search: true
-    contents:
-      - index.qmd
-      - getting_started.qmd
-      - section: "Package Reference"
-        contents: package_reference/*
+    contents: auto
   margin-header: |
     ![](/logo.png)
   favicon: /logo.png
