@@ -81,7 +81,7 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
     output_folder = Path(output_folder)
     notebook_location = Path(notebook_location)
 
-    output_location = Path(os.path.relpath(notebook_location, documentation_source))
+    output_location = output_folder / Path(os.path.relpath(notebook_location, documentation_source))
     output_location.parent.mkdir(parents=True, exist_ok=True)
 
     # Convert notebook to `qmd`
