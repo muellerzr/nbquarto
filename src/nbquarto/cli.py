@@ -1,6 +1,7 @@
 import argparse
 import logging
-from pathlib import Path, PurePosixPath
+import os
+from pathlib import Path
 
 import yaml
 
@@ -76,11 +77,12 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
         else:
             output_folder = config.get("output_folder")
     documentation_source = config.get("documentation_source", "nbs")
-    output_folder = PurePosixPath(output_folder)
-    notebook_location = PurePosixPath(notebook_location)
 
-    output_location = output_folder / notebook_location.relative_to(documentation_source)
-    Path(output_location.parent).mkdir(parents=True, exist_ok=True)
+    output_folder = Path(output_folder)
+    notebook_location = Path(notebook_location)
+
+    output_location = output_folder / Path(os.path.relpath(notebook_location, documentation_source))
+    output_location.parent.mkdir(parents=True, exist_ok=True)
 
     # Convert notebook to `qmd`
     notebook = notebook_processor.notebook
