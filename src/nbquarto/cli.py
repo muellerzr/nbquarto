@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import warnings
 from pathlib import Path
 
 import yaml
@@ -58,7 +59,13 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
 
     # Bring in the processors
     logger.debug("Importing notebook processors")
-    notebook_processors = config.get("notebook_processors", [])
+    if config.get("processors", None) is not None:
+        warnings.warn(
+            "Using `processors` as a key in the `config.yaml` will be deprecated in `0.1.0`. Please use `notebook_processors` instead."
+        )
+        notebook_processors = config.get("processors")
+    else:
+        notebook_processors = config.get("notebook_processors", [])
     for i, processor in enumerate(notebook_processors):
         module_location, class_name = processor.split(":")
         module = __import__(module_location, fromlist=[class_name])
