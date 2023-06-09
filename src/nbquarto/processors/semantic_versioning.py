@@ -14,8 +14,7 @@
 
 import logging
 
-from ..notebook import make_cell
-from ..processor import Processor
+from ..processor import RawPostProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -62,10 +61,11 @@ REFERENCE_JQUERY = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.
 REFERENCE_JAVASCRIPT = f"<script>{REFERENCE_JAVASCRIPT}</script>"
 
 
-class SemanticVersioningProcessor(Processor):
+class SemanticVersioningProcessor(RawPostProcessor):
     """
-    A processor which will inject javascript into the top of the `qmd` or
-    notebook to enable semantic versioning of the documentation.
+    A processor which will inject javascript into the top of the `qmd`
+    to enable semantic versioning of the documentation by hiding parts
+    of the sidebar.
 
     Assumes your documentation structure is as follows:
 
@@ -86,24 +86,8 @@ class SemanticVersioningProcessor(Processor):
     and only show `version_1`.
     """
 
-    cell_types = "markdown"
-    found_markdown_cell = False
-    markdown_cell_index = None
-
-    def process(self, cell):
-        if self.is_first_markdown(cell):
-            # Create the new markdown cell
-            new_cell = make_cell("\n".join([REFERENCE_JQUERY, REFERENCE_JAVASCRIPT]), "markdown")
-            # Insert the new cell just after the first markdown cell
-            self.notebook.cells.insert(self.markdown_cell_index + 1, new_cell)
-            # Update the notebook order
-            for i, cell in enumerate(self.notebook.cells):
-                cell.index_ = i
-
-    def is_first_markdown(self, cell):
-        if not self.found_markdown_cell:
-            self.found_markdown_cell = True
-            self.markdown_cell_index = cell["index_"]
-            return True
-        else:
-            return False
+    def process(self):
+        replacement_str = "\n".join([REFERENCE_JQUERY, REFERENCE_JAVASCRIPT])
+        if replacement_str not in self.content:
+            self.content = "\n".join([REFERENCE_JQUERY, REFERENCE_JAVASCRIPT, self.content])
+        return self.content

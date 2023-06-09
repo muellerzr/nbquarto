@@ -1,6 +1,6 @@
 
 documentation_source: tests
-processors: [
+notebook_processors: [
     nbquarto.processors.example:BasicProcessor,
     nbquarto.processors.autodoc:AutoDocProcessor
 ]

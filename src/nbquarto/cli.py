@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import warnings
 from pathlib import Path
 
 import yaml
@@ -57,17 +58,24 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
     config = get_configuration(config_file)
 
     # Bring in the processors
-    logger.debug("Importing processors")
-    processors = config.get("processors", [])
-    for i, processor in enumerate(processors):
+    logger.debug("Importing notebook processors")
+    if config.get("processors", None) is not None:
+        warnings.warn(
+            "Using `processors` as a key in the `config.yaml` will be deprecated in `0.1.0`. Please use `notebook_processors` instead."
+        )
+        notebook_processors = config.get("processors")
+    else:
+        notebook_processors = config.get("notebook_processors", [])
+    for i, processor in enumerate(notebook_processors):
         module_location, class_name = processor.split(":")
         module = __import__(module_location, fromlist=[class_name])
-        processors[i] = getattr(module, class_name)
+        notebook_processors[i] = getattr(module, class_name)
 
     # Process and save the new notebook
-    logger.debug(f"Processing notebook {notebook_location} with processors: {processors}")
-    notebook_processor = NotebookProcessor(notebook_location, processors=processors, config=config)
+    logger.debug(f"Processing notebook {notebook_location} with processors: {notebook_processors}")
+    notebook_processor = NotebookProcessor(notebook_location, processors=notebook_processors, config=config)
     notebook_processor.process_notebook()
+
     if output_folder is None:
         if "output_folder" not in config:
             logger.warn(
@@ -118,11 +126,34 @@ def process_notebook(notebook_location: str, config_file: str, output_folder: st
 
     # Join the markdown lines into a single string
     md_source = "\n".join(md)
+
     output_location = output_location.with_suffix(".qmd")
 
     with open(output_location, "w") as f:
         f.write(md_source)
     logger.info(f"Successfully processed notebook at {notebook_location} and saved to {output_location}")
+
+
+def process_qmd(qmd_location: str, config: dict):
+    # Bring in the processors
+    logger.debug("Importing and applying qmd processors")
+    qmd_processors = config.get("qmd_processors", [])
+    for i, processor in enumerate(qmd_processors):
+        if isinstance(processor, str):
+            module_location, class_name = processor.split(":")
+            module = __import__(module_location, fromlist=[class_name])
+            qmd_processors[i] = getattr(module, class_name)
+
+    with open(qmd_location, "r") as f:
+        qmd_source = f.read()
+
+    # Process and save the new notebook
+    for processor in qmd_processors:
+        processor = processor(qmd_source)
+        qmd_source = processor.process()
+
+    with open(qmd_location, "w") as f:
+        f.write(qmd_source)
 
 
 def main():
@@ -156,3 +187,15 @@ def main():
                 process_notebook(path, args.config_file, args.output_folder)
     else:
         process_notebook(args.notebook_file, args.config_file, args.output_folder)
+
+    config = get_configuration(args.config_file)
+
+    if len(config.get("qmd_processors", [])) > 0:
+        if args.output_folder is None:
+            doc_path = config.get("output_folder", "processed")
+        else:
+            doc_path = args.output_folder
+        for file in Path(doc_path).glob("**/*"):
+            if file.is_file() and file.suffix == ".qmd":
+                process_qmd(file, config)
+                logger.info(f"Successfully postprocessed {file}")

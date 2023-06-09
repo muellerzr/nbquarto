@@ -29,7 +29,7 @@ For example, located [here](https://github.com/muellerzr/nbquarto/blob/main/conf
 ```yaml
 documentation_source: nbs
 output_folder: docs
-processors: [
+notebook_processors: [
     nbquarto.processors.autodoc:AutoDocProcessor
 ]
 
@@ -42,7 +42,7 @@ This reads as follows:
 
 - `output_folder`: All notebooks will be saved to a (potentially new) `processed_notebooks` directory
 
-- `processors`: This contains the list of processors we want to apply
+- `notebook_processors`: This contains the list of processors we want to apply on notebooks specifically
   
   - `nbquarto.processors.example:BasicProcessor` and `nbquarto.processors.autodoc:AutoDocProcessor`: This is the exact import for the processor to apply. Can also be relative if the package is setup for it (so it could be `nbquarto.processors:AutoDocProcessor`)
 - `processor_args`: This contains a list of `processor`: `args` that should be passed all the time to a particular processor, if it takes in special configuration arguments
@@ -104,7 +104,7 @@ To then use it in your own framework, simply add it to your `config.yaml` file a
 ```yaml
 documentation_source: nbs
 output_folder: docs
-processors: [
+notebook_processors: [
     module.to.processor:BasicProcessor,
 ]
 ```
@@ -128,7 +128,7 @@ class ProcessorWithArgs(Processor):
 ```yaml
 documentation_source: nbs
 output_folder: docs
-processors: [
+notebook_processors: [
     module.to.processor:ProcessorWithArgs,
 ]
 

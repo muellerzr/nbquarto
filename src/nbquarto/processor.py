@@ -107,6 +107,50 @@ class Processor:
         return self.process_cell(cell)
 
 
+class RawPostProcessor:
+    """
+    A processor class which deals with modifying the raw `.qmd` files
+    directly. These are ran *after* the notebook has been processed
+    and converted to a `.qmd` file.
+
+    Similar to the `Processor` class, you should implement a
+    `process` function to be called, however here it will
+    just always be called and should modify the raw string
+    text, which is stored in `self.content`.
+
+    Will **always** be ran on each notebook if enabled for the
+    project.
+    """
+
+    content: str = None
+
+    def __init__(self, content: str):
+        """
+        Args:
+            content (`str`):
+                The raw text of a `.qmd` file
+        """
+        self.content = content
+
+    def process(self):
+        """
+        A function to apply `self.content`.
+
+        Example:
+        ```python
+        def process(self):
+            self.content = f'Founda  directive!\\n{self.content}'
+        ```
+        """
+        raise NotImplementedError("You must implement the `process` method to apply this processor")
+
+    def __call__(self):
+        """
+        Processes the raw text of a `.qmd` file and returns the content
+        """
+        return self.process()
+
+
 class NotebookProcessor:
     """
     Processes notebook cells and comments in a notebook
@@ -147,6 +191,7 @@ class NotebookProcessor:
             cell.directives_ = extract_directives(cell, remove_directives=remove_directives, language=self.language)
         processor_args = config.get("processor_args", {})
         self.processors = make_processors(processors, notebook=self.notebook, processor_args=processor_args)
+        self.post_processors = config.get("post_processors", [])
         self.debug = debug
         self.remove_directives = remove_directives
         if process_immediately:
