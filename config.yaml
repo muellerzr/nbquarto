@@ -1,7 +1,7 @@
 documentation_source: nbs
 output_folder: docs
-processors: [
-    nbquarto.processors.autodoc:AutoDocProcessor
+notebook_processors: [
+    nbquarto.processors:AutoDocProcessor,
 ]
 
 processor_args:

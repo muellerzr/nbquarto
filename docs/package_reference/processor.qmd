@@ -100,8 +100,51 @@ correct type and contains the correct directive
 
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
-### `class NotebookProcessor` {#nbquarto.processor.NotebookProcessor}
+### `class RawPostProcessor` {#nbquarto.processor.RawPostProcessor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L110){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`content`**`: str`)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+A processor class which deals with modifying the raw `.qmd` files
+directly. These are ran *after* the notebook has been processed
+and converted to a `.qmd` file.
+
+Similar to the `Processor` class, you should implement a 
+`process` function to be called, however here it will 
+just always be called and should modify the raw string
+text, which is stored in `self.content`. 
+
+Will **always** be ran on each notebook if enabled for the 
+project.
+
+</div><div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+#### `process` {#nbquarto.processor.RawPostProcessor.process}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L133){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+()
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+A function to apply `self.content`.
+
+Example:
+```python
+def process(self):
+    self.content = f'Founda  directive!\n{self.content}'
+```
+
+</div></div>
+
+</div>
+
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+
+### `class NotebookProcessor` {#nbquarto.processor.NotebookProcessor}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L152){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 (**`path`**`: str = None`, **`processors`**`: list = []`, **`notebook`**`: AttributeDictionary = None`, **`config`**`: dict = {}`, **`debug`**`: bool = False`, **`remove_directives`**`: bool = True`, **`process_immediately`**`: bool = False`)
 </p>
@@ -131,7 +174,7 @@ Processes notebook cells and comments in a notebook
 
 </div><div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process_cell` {#nbquarto.processor.NotebookProcessor.process_cell}
-[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L155){style="float:right;font-size:.875rem;"}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L198){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 (**`processor`**`: callable`, **`cell`**`: AttributeDictionary`)
 </p>
@@ -151,7 +194,7 @@ explicitly and instead a user should use `process_notebook`
 </div></div>
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process_notebook` {#nbquarto.processor.NotebookProcessor.process_notebook}
-[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L173){style="float:right;font-size:.875rem;"}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L216){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 ()
 </p>

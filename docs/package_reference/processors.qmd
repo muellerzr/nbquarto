@@ -6,6 +6,7 @@ jupyter: python3
 > The various `Processor` classes available to use
 
 
+## Processors for Notebooks
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
 ### `class BasicProcessor` {#nbquarto.processors.example.BasicProcessor}
@@ -142,18 +143,22 @@ This function adds two numbers together
 ::::
 :::
 
+## Post Processors
+
+Post processors get applied after all regular processors get applied, and are performed on the output `.qmd` files across the entire *project*.
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
 ### `class SemanticVersioningProcessor` {#nbquarto.processors.SemanticVersioningProcessor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/semantic_versioning.py#L65){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
-(**`notebook`**`: AttributeDictionary`)
+(**`content`**`: str`)
 </p>
 
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 
-A processor which will inject javascript into the top of the `qmd` or
-notebook to enable semantic versioning of the documentation.
+A processor which will inject javascript into the top of the `qmd`
+to enable semantic versioning of the documentation by hiding parts
+of the sidebar.
 
 Assumes your documentation structure is as follows:
 
