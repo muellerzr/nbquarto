@@ -2,7 +2,8 @@ import unittest
 
 from nbquarto.notebook import make_cell, new_notebook
 from nbquarto.processor import NotebookProcessor, Processor
-from nbquarto.processors import AutoDocProcessor, CodeNoteProcessor
+from nbquarto.processors import AutoDocProcessor, CodeNoteProcessor, SemanticVersioningProcessor
+from nbquarto.processors.semantic_versioning import REFERENCE_JAVASCRIPT, REFERENCE_JQUERY
 
 
 class BasicProcessor(Processor):
@@ -116,4 +117,46 @@ class TestAutoDoc(unittest.TestCase):
         self.assertTrue("Should contain the exact import location" in self.notebook_processor.notebook.cells[1].source)
         self.assertTrue(
             "Applies the processor to a cell if the cell is of the" in self.notebook_processor.notebook.cells[2].source
+        )
+
+
+class TestSemanticVersioning(unittest.TestCase):
+    processor = SemanticVersioningProcessor
+
+    def reset_cells(self):
+        test_cells = [
+            make_cell("# Test Notebook", "markdown"),
+            make_cell("Here's some text!", "markdown"),
+        ]
+        self.test_notebooks = [
+            new_notebook(cells=test_cells),
+            new_notebook(cells=[make_cell("print('Some code!')")] + test_cells),
+        ]
+
+    def setUp(self):
+        self.reset_cells()
+
+    def test_base_case(self):
+        "Checks if we can insert directly to the first cell"
+        self.notebook_processor = NotebookProcessor(
+            processors=[self.processor],
+            notebook=self.test_notebooks[0],
+        )
+        self.notebook_processor.process_notebook()
+        self.assertEqual(self.notebook_processor.notebook.cells[0].source, "# Test Notebook")
+        self.assertEqual(
+            self.notebook_processor.notebook.cells[1].source, f"{REFERENCE_JQUERY}\n{REFERENCE_JAVASCRIPT}"
+        )
+
+    def test_around_code_cell(self):
+        "Checks that it can be inserted under a markdown cell after a code cell in the very start"
+        self.notebook_processor = NotebookProcessor(
+            processors=[self.processor],
+            notebook=self.test_notebooks[1],
+        )
+        self.notebook_processor.process_notebook()
+        self.assertEqual(self.notebook_processor.notebook.cells[0].source, "print('Some code!')")
+        self.assertEqual(self.notebook_processor.notebook.cells[1].source, "# Test Notebook")
+        self.assertEqual(
+            self.notebook_processor.notebook.cells[2].source, f"{REFERENCE_JQUERY}\n{REFERENCE_JAVASCRIPT}"
         )

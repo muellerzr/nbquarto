@@ -22,7 +22,7 @@ Example usage:
 
 ```python
 #| process
-def my_function(): 
+def my_function():
     return "Hello world!"
 ```
 
@@ -36,10 +36,9 @@ Example outcome:
 def my_function():
     return "Hello world!"
 ```
-
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
-### `class AutoDocProcessor` {#nbquarto.processors.autodoc.AutoDocProcessor}
+### `class AutoDocProcessor` {#nbquarto.processors.AutoDocProcessor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/autodoc.py#L250){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 (**`notebook`**, **`processor_args`**`: dict = {}`)
@@ -48,7 +47,7 @@ def my_function():
 <div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
 
 A processor which will automatically generate API documentation for a given class or method.
-Largely relies on the implementation in [hf-doc-builder](https://github.comn/huggingface/doc-builder),
+Largely relies on the implementation in [hf-doc-builder](https://github.com/huggingface/doc-builder),
 while adding some customizations for Quarto.
 
 This processor expects the following directives:
@@ -86,10 +85,9 @@ To expose all public methods and include special or hidden methods:
 Example outcome:
 
 (See the auto-generated docs that made this!)
-
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
-### `class CodeNoteProcessor` {#nbquarto.processors.codenotes.CodeNoteProcessor}
+### `class CodeNoteProcessor` {#nbquarto.processors.CodeNoteProcessor}
 [\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/codenotes.py#L124){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 (**`notebook`**`: AttributeDictionary`)
@@ -139,8 +137,43 @@ def addition(a,b):
 ```{.python}
 addition(a,b)
 ```
-:::{style='padding-top: 0px;'}
+::::{style='padding-top: 0px;'}
 This function adds two numbers together
-:::
+::::
 :::
 
+<div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
+
+### `class SemanticVersioningProcessor` {#nbquarto.processors.SemanticVersioningProcessor}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/semantic_versioning.py#L65){style="float:right;font-size:.875rem;"}
+<p style="font-size:.875rem;line-height:1.25rem;">
+(**`notebook`**`: AttributeDictionary`)
+</p>
+
+<div style="font-size:.875rem;line-height:1.25rem;margin-bottom:1.25em; margin-top:1.25em; padding_bottom:0;">
+
+A processor which will inject javascript into the top of the `qmd` or
+notebook to enable semantic versioning of the documentation.
+
+Assumes your documentation structure is as follows:
+
+```
+- docs/
+  - version_1
+    - page_1.qmd
+    - page_2.qmd
+  - version_2
+    - page_1.qmd
+    - page_2.qmd
+```
+
+From here, the sidebar will be populated based on the
+current opened page and its semantic version. So if
+you are on `/docs/version_1/page_1`, the sidebar will
+hide all of `version_2`'s pages (and any others there may be),
+and only show `version_1`.
+
+</div>
+</div>
+
+This processor also requires that your project is configured in a particular way. To read more be sure to check out the usage guide. **TO BE COMPLETED**

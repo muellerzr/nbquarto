@@ -131,7 +131,7 @@ Processes notebook cells and comments in a notebook
 
 </div><div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process_cell` {#nbquarto.processor.NotebookProcessor.process_cell}
-[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L154){style="float:right;font-size:.875rem;"}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L155){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 (**`processor`**`: callable`, **`cell`**`: AttributeDictionary`)
 </p>
@@ -151,7 +151,7 @@ explicitly and instead a user should use `process_notebook`
 </div></div>
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 #### `process_notebook` {#nbquarto.processor.NotebookProcessor.process_notebook}
-[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L172){style="float:right;font-size:.875rem;"}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processor.py#L173){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 ()
 </p>
@@ -163,5 +163,4 @@ Processes the content of the notebook
 </div></div>
 
 </div>
-
 
