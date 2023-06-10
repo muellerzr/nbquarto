@@ -149,7 +149,7 @@ Post processors get applied after all regular processors get applied, and are pe
 <div style="background:#f7f7f7; border:2px solid #5a5a5a; border-top-width:2px; border-left-width: 2px; border-top-left-radius: 0.75rem; margin-top: 2rem; margin-bottom: 1.5rem; padding-left: 1rem; padding-right: .5rem;">
 
 ### `class SemanticVersioningProcessor` {#nbquarto.processors.SemanticVersioningProcessor}
-[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/semantic_versioning.py#L65){style="float:right;font-size:.875rem;"}
+[\<source\>](https://github.com/muellerzr/nbquarto/blob/main/src/nbquarto/processors/semantic_versioning.py#L104){style="float:right;font-size:.875rem;"}
 <p style="font-size:.875rem;line-height:1.25rem;">
 (**`content`**`: str`)
 </p>
