@@ -43,6 +43,46 @@ var all_versioned_menus = $(".sidebar-menu-container > .list-unstyled").children
 // the latter parts after the version number are not important nor will be in there.
 // eventually need to handle a special case when we use the latest stable version
 var url = window.location.pathname.split("/")[1]
+url = `/${url}/`
+
+// Create a dropdown menu for the versions
+var version_menu = '<select id="version-menu" class="form-input mr-1 !mt-0 !w-20 rounded !border border-gray-200 p-1 text-xs uppercase dark:!text-gray-400" style="width:100%;">'
+raw_urls = []
+
+function AddVersion(index, version_value, version_url){
+    if (window.location.pathname.split("/")[1] === version_value){
+        version_menu += `<option value="${version_value}" version-url="${version_url}" selected>${version_value}</option>`
+    }
+    else{
+        version_menu += `<option value="${version_value}" version-url="${version_url}">${version_value}</option>`
+    }
+}
+
+(all_versioned_menus).each(
+    (index) => {
+        let menu = all_versioned_menus[index]
+        let version_url = $(menu).find(`a[href]`)[0].href
+        let version = version_url.split("/").at(-2)
+        // Add the version number to the list of version numbers
+        AddVersion(index, version, version_url)
+    }
+)
+
+version_menu += '</select>'
+
+// Add the version menu to the sidebar
+let container = $(".sidebar-menu-container")
+container.prepend(version_menu)
+
+// Add the event listener to the version menu
+$(document).ready(function() {
+    $('#version-menu').on('change', function() {
+        var nSelectOption = $('#version-menu').find(':selected');
+        window.location.href = nSelectOption.attr('version-url');
+    });
+});
+
+// Hide all non-active versioned menus
 for (var versioned_menu of all_versioned_menus){
     // Check if the current url extension is in the sidebar menu
     var active_sidebar = $(versioned_menu).find(`a[href*="${url}"]`)[0]
