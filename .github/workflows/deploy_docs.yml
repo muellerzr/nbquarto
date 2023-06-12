@@ -1,0 +1,28 @@
+name: Quality Check
+
+on: workflow_dispatch
+
+jobs:
+  build-main-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+    - name: Checkout main branch
+      run: git checkout main
+    - name: Install Python dependencies
+      run: pip install -e .
+    - name: Build docs
+      run: nbquarto-process --config_file config.yaml --notebook_folder nbs
+    - name: Build docs with Quarto
+      run: |
+        cd docs
+        quarto render
+        cd ..
+        zip -r _docs/ main.zip
+    - name: Upload to branch
+      run: |
+        curl -i -X PUT -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -d '{"message": "Uploading updated docs from branch main", "content": "$(base64 main.zip)", "branch": "release-docs"}' https://api.github.com/repos/muellerzr/nbquarto/contents/main.zip
