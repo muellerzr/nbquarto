@@ -1,6 +1,7 @@
 name: Quality Check
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
 
 jobs:
   build-main-docs:
