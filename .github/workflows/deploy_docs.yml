@@ -20,10 +20,11 @@ jobs:
         pip install git+https://github.com/huggingface/doc-builder
     - name: Build docs
       run: nbquarto-process --config_file config.yaml --notebook_folder nbs
-    - name: Install quarto
+    - name: Install quarto and jupyter
       run: |
         wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.361/quarto-1.3.361-linux-amd64.deb
         sudo dpkg -i quarto-1.3.361-linux-amd64.deb
+        pip install notebook nbclient
     - name: Build docs with Quarto
       run: |
         cd docs
