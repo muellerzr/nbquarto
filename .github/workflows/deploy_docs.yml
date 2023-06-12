@@ -20,6 +20,8 @@ jobs:
         pip install git+https://github.com/huggingface/doc-builder
     - name: Build docs
       run: nbquarto-process --config_file config.yaml --notebook_folder nbs
+    - uses: quarto-dev/quarto-actions/setup@v2 
+      run: quarto --version
     - name: Build docs with Quarto
       run: |
         cd docs
