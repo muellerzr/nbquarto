@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:      
+        ref: main
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
       with:
         python-version: 3.9
-    - name: Checkout main branch
-      run: git checkout main
     - name: Install Python dependencies
       run: pip install -e .
     - name: Build docs
