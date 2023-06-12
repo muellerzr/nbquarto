@@ -33,7 +33,7 @@ jobs:
         zip -r main.zip _docs/ 
     - name: Upload to branch
       run: |
-        curl -i \
+        curl -L \
           -X PUT \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github+json" \
