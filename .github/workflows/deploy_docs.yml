@@ -15,7 +15,7 @@ jobs:
       with:
         python-version: 3.9
     - name: Install Python dependencies
-      run: pip install -e .
+      run: pip install -e .[quality]
     - name: Build docs
       run: nbquarto-process --config_file config.yaml --notebook_folder nbs
     - name: Build docs with Quarto
