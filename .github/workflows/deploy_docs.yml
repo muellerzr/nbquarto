@@ -30,7 +30,7 @@ jobs:
         cd docs
         quarto render
         cd ..
-        zip -r _docs/ main.zip
+        zip -r main.zip _docs/ 
     - name: Upload to branch
       run: |
         curl -i -X PUT -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -d '{"message": "Uploading updated docs from branch main", "content": "$(base64 main.zip)", "branch": "release-docs"}' https://api.github.com/repos/muellerzr/nbquarto/contents/main.zip
