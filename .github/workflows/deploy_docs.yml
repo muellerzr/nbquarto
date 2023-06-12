@@ -31,12 +31,14 @@ jobs:
         quarto render
         cd ..
         zip -r main.zip _docs/
+        base64 main.zip > main.b64
     - name: Upload to branch
       run: |
-        curl -L \
+        curl -i \
           -X PUT \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github+json" \
           -H "X-Github-Api-Version: 2022-11-28" \
+          -d @main.b64 \
           https://api.github.com/repos/muellerzr/nbquarto/contents/main.zip \
-          -d "{\"message\": \"Uploading updated docs from branch main\", \"content\": \"$(base64 main.zip)\", \"branch\": \"release-docs\"}"
+          -d '{"message": "Uploading updated docs from branch main", "branch": "release-docs"}'
