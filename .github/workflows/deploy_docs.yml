@@ -30,7 +30,7 @@ jobs:
         cd docs
         quarto render
         cd ..
-        zip -r main.zip _docs/ | base64 > encoded.txt
+        zip -r - _docs/ | base64 > encoded.txt
     - name: Upload to branch
       run: |
         curl -L \
