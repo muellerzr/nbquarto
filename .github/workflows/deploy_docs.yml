@@ -31,6 +31,7 @@ jobs:
         quarto render
         cd ..
         echo "DOCS_BASE_64=$(echo -n zip -r main.zip _docs/ | base64)" >> $GITHUB_ENV
+        echo $DOCS_BASE_64
     - name: Upload to branch
       run: |
         curl -L \
