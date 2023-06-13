@@ -47,10 +47,10 @@ jobs:
           --arg message "Uploading updated docs from branch main" \
           --arg branch "release-docs"' |
 
-        curl -i \
+        curl -L \
           -X PUT \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "X-Github-Api-Version: 2022-11-28" \
-          -d "data=@-" \
+          -d - \
           https://api.github.com/repos/muellerzr/nbquarto/contents/main.zip
