@@ -43,9 +43,9 @@ jobs:
               "file_name": "main.zip"
             }
           }
-          } \
+          }' \
           --arg message "Uploading updated docs from branch main" \
-          --arg branch "release-docs"' |
+          --arg branch "release-docs" |
 
         curl -L \
           -X PUT \
