@@ -8,14 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-      with:      
-        ref: main
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
       with:
         python-version: 3.9
     - name: Install Python dependencies
       run: |
+        git checkout main
         pip install -e .[quality]
         pip install git+https://github.com/huggingface/doc-builder
     - name: Build docs
@@ -32,6 +31,10 @@ jobs:
         cd ..
         zip -r main.zip _docs/
         mv main.zip ..
+    - uses: actions/checkout@v3
+      with:      
+        ref: release-docs
+
     - name: Upload to branch
       run: |    
         git checkout release-docs
