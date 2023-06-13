@@ -34,7 +34,7 @@ jobs:
         base64 main.zip > main.b64
     - name: Upload to branch
       run: |
-        apt install httpie
+        sudo apt install httpie
         http PUT https://api.github.com/repos/muellerzr/nbquarto/contents/main.zip \
           "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           message="Uploading updated docs from branch main" \
