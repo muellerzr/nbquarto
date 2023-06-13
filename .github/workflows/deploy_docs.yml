@@ -32,14 +32,15 @@ jobs:
         cd ..
         zip -r main.zip _docs/
         mv main.zip ..
+
     - uses: actions/checkout@v3
       with:      
         ref: release-docs
 
     - name: Upload to branch
-      run: |    
-        git fetch origin main
-        git checkout release-docs
+      run: |
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
         mv ../main.zip .
         git add main.zip
         git commit -m "Updating main docs"
